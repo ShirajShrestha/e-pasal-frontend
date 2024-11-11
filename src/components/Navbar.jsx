@@ -4,7 +4,12 @@ import { FiShoppingCart, FiHeart } from "react-icons/fi";
 const Navbar = () => {
   return (
     <div className="flex ">
-      <div className="text-2xl font-bold font-primary mx-4 my-1">Logo</div>
+      {/* <div className="text-2xl font-bold font-primary mx-4 my-1">Logo</div> */}
+      <div class="flex-shrink-0 ">
+        <a href="/" class="text-2xl font-bold text-fuchsia-600 font-primary">
+          E-Pasal
+        </a>
+      </div>
 
       <form class="flex items-center max-w-sm mx-auto">
         <label for="simple-search" class="sr-only">
