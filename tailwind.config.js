@@ -6,8 +6,8 @@ module.exports = {
       colors: {
         primary: "#43c3d1",
         secondary: "#2884ff",
-        tertiary: "061123",
-        accent: "#39EEfg",
+        tertiary: "#061123",
+        accent: "#39EEEE",
       },
       fontFamily: {
         primary: ["Questrial", "sans"],
