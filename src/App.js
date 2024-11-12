@@ -1,10 +1,9 @@
-import Card from "./components/Card";
-import Footer from "./components/Footer";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <>
-    <Card/>
+      <Home />
     </>
   );
 }
