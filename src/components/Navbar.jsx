@@ -52,7 +52,7 @@ const Navbar = () => {
               type="text"
               id="simple-search"
               className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-accent focus:border-accent block w-full pl-10 p-2"
-              placeholder="Search branch name..."
+              placeholder="Search product name..."
               required
             />
           </div>
@@ -142,7 +142,7 @@ const Navbar = () => {
                 type="text"
                 id="mobile-search"
                 className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-accent focus:border-accent block w-full p-2"
-                placeholder="Search branch name..."
+                placeholder="Search product name..."
                 required
               />
               <button
