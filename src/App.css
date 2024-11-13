@@ -8,5 +8,12 @@
     overflow: hidden;
     height: 19rem;
     width: 13rem;
-    
+}
+
+@media screen and (max-width: 768px) {
+    .card{
+        height: 19rem;
+        width: 10rem;
+        
+    }
 }

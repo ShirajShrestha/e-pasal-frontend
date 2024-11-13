@@ -27,7 +27,7 @@ const Filter = () => {
         setSearchTerm(newSearchTerm)
     }
   return (
-    <div className='filter-section border border-white rounded-lg shadow-md bg-white mx-3 my-3 w-85'>
+    <div className='filter-section border border-white rounded-lg shadow-md bg-gray-300 mx-3 my-3 '>
      <div className="filter-body my-2 mx-2">
       <p className='my-2 mx-2'>Filter</p>
       <div className="brand-section">
