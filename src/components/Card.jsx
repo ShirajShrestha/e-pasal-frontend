@@ -1,86 +1,29 @@
-import React from 'react'
-import "../App.css"
+import "../App.css";
 
-const Card = () => {
+const Card = ({ name, brand, price, image }) => {
   return (
-    <div className='cards'>
-      <div className="card-section flex flex-wrap justify-center items-center gap-[2.8rem] my-16 ml-[9rem] px-[12rem]">
-        <div className="card font-primary">
-            <img src="https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" 
-            className='cardImage w-full h-56 overflow-hidden rounded-lg' alt="" />
-            <div className="card-body p-[0.3rem_0.01rem_0_0.3rem] leading-[1.3rem]">
-                <div className="card-title">
-                    <p className='card-brand text-sm font-normal text-gray-500'>Brand</p>
-                    <h5 className='card-title font-semibold'>Title</h5>
-                    <p className='card-price mt-[7px] text-[0.84rem] text-[#3095f9]'>Price:1000</p>
-                </div>
+    <div className="h-52 w-38 md:h-72 md:w-48 shadow-lg">
+      <div className="h-3/4">
+        <img
+          src={image}
+          className="w-full h-full  rounded-lg"
+          alt=""
+        />
+      </div>
 
-            </div>
-        </div>
-        <div className="card">
-            <img src="" alt="sd" />
-            <div className="card-body">
-                <div className="card-title">
-                    title
-                </div>
-            </div>
-        </div>
-
-        <div className="card">
-            <img src="" alt="" />
-            <div className="card-body">
-                <div className="card-title">
-                    title
-                </div>
-            </div>
-        </div>
-
-        <div className="card">
-            <img src="" alt="" />
-            <div className="card-body">
-                <div className="card-title">
-                    title
-                </div>
-            </div>
-        </div>
-        <div className="card">
-            <img src="" alt="" />
-            <div className="card-body">
-                <div className="card-title">
-                    title
-                </div>
-            </div>
-        </div>
-
-        <div className="card">
-            <img src="" alt="" />
-            <div className="card-body">
-                <div className="card-title">
-                    title
-                </div>
-            </div>
-        </div>
-
-        <div className="card">
-            <img src="" alt="" />
-            <div className="card-body">
-                <div className="card-title">
-                    title
-                </div>
-            </div>
-        </div>
-
-        <div className="card">
-            <img src="" alt="" />
-            <div className="card-body">
-                <div className="card-title">
-                    title
-                </div>
-            </div>
+      <div className="h-1/4">
+          <p className="text-sm text-gray-500 ml-6">
+            {brand}
+          </p>
+        <div className="flex justify-around items-center">
+          <h5 className="font-semibold">{name} </h5>
+          <p className="mt-[7px] text-[0.84rem] text-[#3095f9]">
+            Price:{price}
+          </p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;
