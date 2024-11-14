@@ -17,7 +17,7 @@ const Landing = () => {
   return (
     <div className="">
       {/* Hero section  */}
-      <section className="relative h-[90vh] bg-gray-900 flex items-center justify-center">
+      <section className="relative h-[90vh] bg-gray-900 flex items-center justify-center -z-10">
         {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
