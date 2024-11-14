@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Contact from "./Contact";
 import Cart from "../components/Cart";
+import ErrorPage from "../components/ErrorPage";
 
 const Home = () => {
   return (
@@ -22,8 +23,9 @@ const Home = () => {
 
       </div> */}
 
-      <Cart/>
+      {/* <Cart/> */}
       {/* <Footer/> */}
+      
       
     </>
   );
