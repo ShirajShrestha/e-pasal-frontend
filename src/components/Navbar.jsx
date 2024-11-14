@@ -1,12 +1,14 @@
-import logo from "../assets/images/e-pasal-high-resolution-logo.png";
 import {
   FiShoppingCart,
   FiHeart,
   FiMenu,
   FiUser,
   FiLogOut,
+  FiShoppingBag,
+  FiPhone,
 } from "react-icons/fi";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,7 +23,7 @@ const Navbar = () => {
     <nav className="bg-white font-primary shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo section*/}
-        <a href="/" className="text-2xl font-bold text-secondary">
+        <a href="/" className="text-2xl font-bold text-primary">
           E-Pasal
         </a>
 
@@ -81,24 +83,30 @@ const Navbar = () => {
 
         {/* Icons and User Profile section (Only visible on larger screens) */}
         <div className="hidden lg:flex items-center space-x-4">
+          <Link to="/products">
+            <FiShoppingBag className="text-xl cursor-pointer hover:text-accent" />
+          </Link>
           <FiShoppingCart className="text-xl cursor-pointer hover:text-accent" />
           <FiHeart className="text-xl cursor-pointer hover:text-accent" />
+          <Link to="/contacts">
+            <FiPhone className="text-xl cursor-pointer hover:text-accent" />
+          </Link>
           <div className="relative">
             <div
               onClick={toggleProfileMenu}
               className="flex items-center space-x-2 cursor-pointer"
             >
               <img
-                src={logo}
+                src="https://images.unsplash.com/photo-1723200166097-4eed8c141f03?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="user"
                 className="w-8 h-8 rounded-full object-cover"
               />
-              <p className="text-gray-700 font-semibold">User Name</p>
+              <p className="text-gray-700 font-semibold">Aurora</p>
             </div>
 
             {/* Profile Dropdown */}
             {profileMenuOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2">
+              <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-10">
                 <a
                   href="/profile"
                   className="flex items-center px-4 py-2 hover:bg-gray-100"
@@ -171,12 +179,24 @@ const Navbar = () => {
             {/* Mobile Menu Items in Column */}
             <div className="flex flex-col space-y-4">
               <div className="flex items-center space-x-2">
+                <Link to="/products">
+                  <FiShoppingBag className="text-xl text-gray-700 cursor-pointer hover:text-accent" />
+                </Link>
+                <span>Products</span>
+              </div>
+              <div className="flex items-center space-x-2">
                 <FiShoppingCart className="text-xl text-gray-700 cursor-pointer hover:text-accent" />
                 <span>Cart</span>
               </div>
               <div className="flex items-center space-x-2">
                 <FiHeart className="text-xl text-gray-700 cursor-pointer hover:text-accent" />
                 <span>Favorites</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Link to="/contacts">
+                  <FiShoppingBag className="text-xl text-gray-700 cursor-pointer hover:text-accent" />
+                </Link>
+                <span>Contact</span>
               </div>
             </div>
 
@@ -190,16 +210,16 @@ const Navbar = () => {
                 className="flex items-center space-x-2 cursor-pointer"
               >
                 <img
-                  src={logo}
+                  src="https://images.unsplash.com/photo-1723200166097-4eed8c141f03?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="user"
                   className="w-10 h-10 rounded-full object-cover"
                 />
-                <p className="text-gray-700 font-semibold">User Name</p>
+                <p className="text-gray-700 font-semibold">Aurora</p>
               </div>
 
               {/* Profile Dropdown (Mobile) */}
               {profileMenuOpen && (
-                <div className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2">
+                <div className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-20 border border-black">
                   <a
                     href="/profile"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
