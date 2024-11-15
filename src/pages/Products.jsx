@@ -62,11 +62,11 @@ const Products = () => {
   ];
   return (
     <div>
-      <div className=" lg:max-h-[40vh] sm:max-h-[10vh] sm:overflow-hidden sm:w-screen ">
+      <div className=" lg:h-96">
         <img
           src="https://images.unsplash.com/photo-1445384763658-0400939829cd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt=""
-          className="lg:h-[40vh] object-cover overflow-hidden  w-full"
+          className=" object-cover h-full  w-full"
         />
       </div>
       <div className="flex flex-col md:flex-row justify-center align my-8 gap-2 w-[90vw] md:w-full m-auto lg:w-4/5 lg:mx-auto">
