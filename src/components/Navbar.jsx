@@ -86,7 +86,9 @@ const Navbar = () => {
           <Link to="/products">
             <FiShoppingBag className="text-xl cursor-pointer hover:text-accent" />
           </Link>
-          <FiShoppingCart className="text-xl cursor-pointer hover:text-accent" />
+          <Link to="/cart">
+            <FiShoppingCart className="text-xl cursor-pointer hover:text-accent" />
+          </Link>
           <FiHeart className="text-xl cursor-pointer hover:text-accent" />
           <Link to="/contacts">
             <FiPhone className="text-xl cursor-pointer hover:text-accent" />
@@ -185,8 +187,10 @@ const Navbar = () => {
                 <span>Products</span>
               </div>
               <div className="flex items-center space-x-2">
-                <FiShoppingCart className="text-xl text-gray-700 cursor-pointer hover:text-accent" />
-                <span>Cart</span>
+                <Link to="/cart">
+                  <FiShoppingCart className="text-xl text-gray-700 cursor-pointer hover:text-accent" />
+                  <span>Cart</span>
+                </Link>
               </div>
               <div className="flex items-center space-x-2">
                 <FiHeart className="text-xl text-gray-700 cursor-pointer hover:text-accent" />

@@ -10,6 +10,7 @@ import Products from "./pages/Products";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import ErrorPage from "./components/ErrorPage";
+import Cart from "./components/Cart";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/signin",
         element: <SignIn />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
       },
     ],
   },
