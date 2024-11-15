@@ -13,19 +13,7 @@ import {
   SiPuma,
 } from "react-icons/si";
 import { Link } from "react-router-dom";
-
-const ProductCard = ({ imgSrc, category }) => (
-  <div className="flex flex-col items-center rounded-lg shadow-md h-auto w-28 sm:w-32 md:w-64">
-    <img
-      src={imgSrc}
-      alt={category}
-      className="object-cover w-full h-32 sm:h-48 md:h-80 rounded-t-lg"
-    />
-    <div className="mt-2 text-center">
-      <p className="font-semibold">{category}</p>
-    </div>
-  </div>
-);
+import ProductCard from "../components/ProductCard";
 
 const Landing = () => {
   return (
@@ -113,16 +101,12 @@ const Landing = () => {
           </h2>
           <div className="flex flex-wrap justify-center gap-4">
             {/* Cards */}
-            <div className="flex flex-col items-center rounded-lg shadow-md h-auto w-28 sm:w-32 md:w-64">
-              <img
-                src="https://images.unsplash.com/photo-1628861997457-db259d8322ac?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="Product-image"
-                className="object-cover w-full h-32 sm:h-48 md:h-80 rounded-t-lg"
-              />
-              <div className="mt-2 text-center">
-                <p className="font-semibold">Clothes</p>
-              </div>
-            </div>
+            <ProductCard
+              imgSrc={
+                "https://images.unsplash.com/photo-1628861997457-db259d8322ac?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              }
+              category={"Clothes"}
+            />
 
             {/* Additional product cards... */}
             <ProductCard
