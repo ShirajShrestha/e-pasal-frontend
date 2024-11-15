@@ -7,95 +7,67 @@ const Filter = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+  const brands = ["Beauty", "Fragrances", "Furniture", "Groceries", "Laptops"];
 
-  const brands = [
-    "beauty",
-    "fragrances",
-    "furniture",
-    "groceries",
-    "home-decoration",
-    "laptops",
-  ];
-
-  const handleMinPrice = (e) => {
-    let minValue = e.target.value;
-    setMinPrice(minValue);
-  };
-  const handleMaxPrice = (e) => {
-    let maxValue = e.target.value;
-    setMaxPrice(maxValue);
-  };
-
-  const handleSearch = (e) => {
-    const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
-  };
   return (
-    <div className=" border border-white rounded-lg shadow-md bg-gray-300 mx-3  ">
-      <div className="my-2 mx-2">
-        <p className="my-2 mx-2">Filter</p>
-        <div>
-          {/* category section */}
-          <div className="relative text-left">
-            <button
-              onClick={toggleDropdown}
-              className="inline-flex w-full justify-between rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
-            >
-              <p className="text-tertiary ">Categories</p>
-              <span className="ml-2">▼</span>
-            </button>
+    <div className="bg-white p-4 rounded-lg shadow-lg">
+      <h2 className="text-lg font-semibold mb-4">Filters</h2>
 
-            {isOpen && (
-              <div className="w-58 origin-top-right  right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="searchBar mx-3  py-1 flex items-center border border-black rounded-2xl gap-4 px-1">
-                  <IoMdSearch className="ml-2" />
-                  <input
-                    type="text"
-                    placeholder="search"
-                    className="border-0 outline-none w-full "
-                    value={searchTerm}
-                    onChange={handleSearch}
-                  />
-                </div>
-                <div className="py-1">
-                  {brands.map((brand, index) => (
-                    <a
-                      key={index}
-                      href={`/brand/${brand.toLowerCase()}`}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      {brand}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )}
+      {/* Categories */}
+      <div className="mb-6">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex justify-between items-center w-full border px-4 py-2 rounded-lg text-gray-700 bg-gray-100 focus:outline-none"
+        >
+          Categories
+          <span className="ml-2">{isOpen ? "▲" : "▼"}</span>
+        </button>
+        {isOpen && (
+          <div className="mt-2 border rounded-lg p-3 bg-white shadow-lg">
+            <div className="flex items-center gap-2 mb-3">
+              <IoMdSearch />
+              <input
+                type="text"
+                placeholder="Search categories"
+                className="w-full outline-none px-2 py-1 border rounded-lg"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <ul className="space-y-2">
+              {brands
+                .filter((brand) =>
+                  brand.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((brand, index) => (
+                  <li key={index} className="text-gray-700 hover:text-blue-500">
+                    {brand}
+                  </li>
+                ))}
+            </ul>
           </div>
+        )}
+      </div>
 
-          {/* price section */}
-          <div className="price relative text-left">
-            <p className="my-2">Price Range</p>
-            <input
-              type="number"
-              placeholder="min"
-              onChange={handleMinPrice}
-              value={minPrice}
-              className="mr-3 w-full md:w-20 px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition duration-200 ease-in-out"
-            />
-            To
-            <input
-              type="number"
-              placeholder="max"
-              onChange={handleMaxPrice}
-              value={maxPrice}
-              className=" w-full md:w-20 px-4 py-2 lg:ml-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition duration-200 ease-in-out"
-            />
-            <p>{minPrice}</p>
-            <p>{maxPrice}</p>
-          </div>
+      {/* Price Range */}
+      <div>
+        <h3 className="font-semibold mb-3">Price Range</h3>
+        <div className="flex items-center gap-3">
+          <input
+            type="number"
+            placeholder="Min"
+            className="w-full border px-3 py-2 rounded-lg"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+          />
+          <span className="font-semibold">to</span>
+          <input
+            type="number"
+            placeholder="Max"
+            className="w-full border px-3 py-2 rounded-lg"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+          />
         </div>
       </div>
     </div>

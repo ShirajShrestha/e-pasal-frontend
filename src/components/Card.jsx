@@ -1,20 +1,24 @@
-import "../App.css";
-
 const Card = ({ name, brand, price, image }) => {
   return (
-    <div className="h-52 w-38 md:h-72 md:w-48 shadow-lg">
-      <div className="h-3/4">
-        <img src={image} className="w-full h-full  rounded-lg" alt="" />
+    <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <div className="h-48 lg:h-56 overflow-hidden">
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+        />
       </div>
 
-      <div className="h-1/4">
-        <p className="text-sm text-gray-500 ml-6">{brand}</p>
-        <div className="flex justify-around items-center">
-          <h5 className="font-semibold">{name} </h5>
-          <p className="mt-[7px] text-[0.84rem] text-[#3095f9]">
-            Price:{price}
-          </p>
-        </div>
+      <div className="p-4 flex flex-col gap-2">
+        <p className="text-xs text-gray-500 uppercase tracking-wide">{brand}</p>
+        <h3 className="text-lg font-semibold text-gray-800 truncate">{name}</h3>
+        <p className="text-blue-600 font-bold text-sm">Price: ${price}</p>
+      </div>
+
+      <div className="p-4 pt-0 flex justify-between items-center">
+        <button className="bg-primary text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors">
+          View Details
+        </button>
       </div>
     </div>
   );
