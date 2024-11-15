@@ -9,11 +9,13 @@ import Details from "./pages/Details";
 import Products from "./pages/Products";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import ErrorPage from "./components/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
