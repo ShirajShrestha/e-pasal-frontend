@@ -2,11 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const ErrorPage = () => {
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-//   const handleBack = () => {
-//     navigate(-1); // Navigate back to the previous page
-//   };
+  const handleBack = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 px-4">
@@ -21,7 +21,7 @@ const ErrorPage = () => {
         </p>
         <div className="flex justify-center gap-4">
           <button
-            // onClick={handleBack}
+            onClick={() => handleBack()}
             className="px-6 py-3 text-base md:text-lg bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition duration-200"
           >
             Go Back
