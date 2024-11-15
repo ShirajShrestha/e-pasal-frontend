@@ -8,56 +8,56 @@ const Products = () => {
       price: "10.99",
       brand: "abc",
       image:
-        "https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
     },
     {
       name: "Pizza",
       price: "10.99",
       brand: "abc",
       image:
-        "https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
     },
     {
       name: "Pizza",
       price: "10.99",
       brand: "abc",
       image:
-        "https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
     },
     {
       name: "Pizza",
       price: "10.99",
       brand: "abc",
       image:
-        "https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
     },
     {
       name: "Pizza",
       price: "10.99",
       brand: "abc",
       image:
-        "https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
     },
     {
       name: "Pizza",
       price: "10.99",
       brand: "abc",
       image:
-        "https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
     },
     {
       name: "Pizza",
       price: "10.99",
       brand: "abc",
       image:
-        "https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
     },
     {
       name: "Pizza",
       price: "10.99",
       brand: "abc",
       image:
-        "https://th.bing.com/th/id/OIP.ZZsn6lD6PCjocBzx1tuu1QHaEo?w=284&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
     },
   ];
   return (
@@ -69,12 +69,12 @@ const Products = () => {
           className=" object-cover h-full  w-full"
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-center align my-8 gap-2 w-[90vw] md:w-full m-auto lg:w-4/5 lg:mx-auto">
+      <div className="flex flex-col md:flex-row justify-center my-8 gap-2 w-[90vw] md:w-full lg:w-4/5 md:gap-8 mx-auto lg:mx-2">
         <div className="md:w-1/4">
           <Filter />
         </div>
         <div className="md:w-3/4">
-          <div className="card-section grid grid-cols-2 md:grid-cols-3 lg:gap-3 lg:grid-cols-4 place-items-center gap-3">
+          <div className="card-section grid grid-cols-2 md:grid-cols-3 lg:gap-4 lg:grid-cols-4 place-items-center gap-3 ">
             {products.map((product) => (
               <div>
                 <Card
