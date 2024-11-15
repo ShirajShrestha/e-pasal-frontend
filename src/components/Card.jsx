@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Card = ({ name, brand, price, image }) => {
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
@@ -12,13 +14,15 @@ const Card = ({ name, brand, price, image }) => {
       <div className="p-4 flex flex-col gap-2">
         <p className="text-xs text-gray-500 uppercase tracking-wide">{brand}</p>
         <h3 className="text-lg font-semibold text-gray-800 truncate">{name}</h3>
-        <p className="text-blue-600 font-bold text-sm">Price: ${price}</p>
+        <p className="text-secondary font-bold text-sm">Price: ${price}</p>
       </div>
 
       <div className="p-4 pt-0 flex justify-between items-center">
-        <button className="bg-primary text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors">
-          View Details
-        </button>
+        <Link to="/products/1">
+          <button className="bg-primary text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-secondary transition-colors">
+            View Details
+          </button>
+        </Link>
       </div>
     </div>
   );
