@@ -1,11 +1,12 @@
-import ErrorPage from "./components/ErrorPage";
-import Home from "./pages/Home";
-
+import { Outlet } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 function App() {
   return (
     <>
-      <Home />
-      <ErrorPage/>
+      <Navbar />
+      <Outlet />
+      <Footer />
     </>
   );
 }
