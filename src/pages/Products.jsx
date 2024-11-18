@@ -1,91 +1,63 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "../components/Card";
 import Filter from "../components/Filter";
+import axios from "axios";
+import { fetchProducts, setProducts } from "../stores/productSlice";
 
 const Products = () => {
-  const products = [
-    {
-      name: "Pizza",
-      price: "10.99",
-      brand: "abc",
-      image:
-        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
-    },
-    {
-      name: "Pizza",
-      price: "10.99",
-      brand: "abc",
-      image:
-        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
-    },
-    {
-      name: "Pizza",
-      price: "10.99",
-      brand: "abc",
-      image:
-        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
-    },
-    {
-      name: "Pizza",
-      price: "10.99",
-      brand: "abc",
-      image:
-        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
-    },
-    {
-      name: "Pizza",
-      price: "10.99",
-      brand: "abc",
-      image:
-        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
-    },
-    {
-      name: "Pizza",
-      price: "10.99",
-      brand: "abc",
-      image:
-        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
-    },
-    {
-      name: "Pizza",
-      price: "10.99",
-      brand: "abc",
-      image:
-        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
-    },
-    {
-      name: "Pizza",
-      price: "10.99",
-      brand: "abc",
-      image:
-        "https://mac-center.com.pr/cdn/shop/files/iPhone_16_Pro_Max_Desert_Titanium_PDP_Image_Position_1__en-US_cd3b106e-724d-4b79-8c34-0cd93e66c4d7.jpg?v=1726227139",
-    },
-  ];
+  const dispatch = useDispatch();
+  // const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const products = useSelector(setProducts);
+
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      try {
+        const response = await axios.get("https://dummyjson.com/products");
+        // setProducts(response.data.products);
+        dispatch(fetchProducts(response.data.products));
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllProducts();
+  }, []);
+
   return (
     <div>
-      <div className=" lg:h-96">
+      <div className="lg:h-96">
         <img
           src="https://images.unsplash.com/photo-1445384763658-0400939829cd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt=""
-          className=" object-cover h-full  w-full"
+          alt="Banner"
+          className="object-cover h-full w-full"
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-center my-8 gap-2 w-[90vw] md:w-full lg:w-4/5 md:gap-8 mx-auto lg:mx-2">
+
+      <div className="flex flex-col md:flex-row justify-center my-8 gap-4 w-[90vw] md:w-full lg:w-4/5 ml-4">
         <div className="md:w-1/4">
           <Filter />
         </div>
+
         <div className="md:w-3/4">
-          <div className="card-section grid grid-cols-2 md:grid-cols-3 lg:gap-4 lg:grid-cols-4 place-items-center gap-3 ">
-            {products.map((product) => (
-              <div>
+          {loading ? (
+            <p className="text-center text-gray-500">Loading products...</p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {products.map((product) => (
                 <Card
-                  name={product.name}
+                  key={product.id}
+                  name={product.title}
                   brand={product.brand}
                   price={product.price}
-                  image={product.image}
+                  image={product.images[0]}
                 />
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
