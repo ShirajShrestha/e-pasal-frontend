@@ -1,7 +1,17 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { FiHeart, FiSend } from "react-icons/fi";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProductDetails,
+  setProductDetails,
+} from "../stores/productDetailsSlice";
 
 const Details = () => {
+  let { id } = useParams();
+  const dispatch = useDispatch();
+  const details = useSelector(setProductDetails);
   const [toggleReview, setToggleReview] = useState("description");
   const [quantity, setQuantity] = useState(1);
 
@@ -15,33 +25,64 @@ const Details = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(
+          `https://dummyjson.com/products/${id}`
+        );
+        dispatch(fetchProductDetails(response.data));
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
+    };
+
+    fetchProduct();
+  }, [dispatch, id]);
+
+  if (!details) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div className="my-4">
       {/* Image and details section  */}
       <div className="flex flex-col lg:flex-row m-4 lg:mx-20">
         <div className="flex-1 ">
           <img
-            src="https://images.unsplash.com/photo-1730727384555-35318cb80600?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="image-name"
+            src={details.images?.[0]}
+            alt={details.title}
             className="lg:w-96 object-cover m-auto rounded-md"
           />
         </div>
         <div className="flex-1  p-4 font-semibold">
           <div className="lg:w-3/4">
-            <p className="font-bold text-2xl">
-              Nike Dri-Fit Training Jacket Winter Special Kit
-            </p>
+            <p className="font-bold text-2xl">{details.title}</p>
             <div className="flex items-center justify-between pb-4">
-              <p className="font-semibold text-gray-600 ml-2 ">Brand: Nike</p>
+              <p className="font-semibold text-gray-600 ml-2 ">
+                Brand: {details.brand}
+              </p>
               <FiHeart className="text-xl cursor-pointer hover:text-accent mr-10" />
             </div>
-            <p className="text-xl font-bold">Rs 900</p>
+            <p className="text-xl font-bold">
+              ${" "}
+              {Math.floor(
+                (details.price -
+                  (details.discountPercentage / 100) * details.price) *
+                  100
+              ) / 100}
+            </p>
             <p className="mb-4">
-              <span className="line-through text-gray-500">Rs 1000 </span>
-              <span className="text-red-600"> 10&#37; discount</span>
+              <span className="line-through text-gray-500">
+                $ {details.price}{" "}
+              </span>
+              <span className="text-red-600">
+                {" "}
+                {details.discountPercentage} &#37; discount
+              </span>
             </p>
             <p className="text-gray-500 mb-4">
-              Stock: <span className="text-black">5</span>{" "}
+              Stock: <span className="text-black">{details.stock} </span>{" "}
             </p>
             <div className="mb-4">
               <p className="font-bold mb-1">Qty</p>
@@ -94,12 +135,7 @@ const Details = () => {
         {/* Conditional description and review rendering */}
         {toggleReview === "description" ? (
           <section className="p-4 min-h-[200px] max-h-[400px] overflow-y-auto">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-            adipisci accusamus error expedita aut quia voluptatem officiis
-            eveniet, fugiat provident temporibus. <br /> Libero sit aperiam
-            assumenda ullam omnis quia doloremque ipsum. Lorem, ipsum dolor sit
-            amet consectetur adipisicing elit. Aliquam quidem tempora maxime
-            asperiores sunt magni quo nisi nemo cum cumque.
+            {details.description}
           </section>
         ) : (
           <div className="px-8 my-4 min-h-[200px] max-h-[400px] overflow-y-auto">
@@ -122,26 +158,18 @@ const Details = () => {
               </div>
             </div>
             {/* reviews for this product */}
-            <div className="flex gap-2 mb-4">
-              <img
-                src="https://plus.unsplash.com/premium_photo-1690407617686-d449aa2aad3c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt=""
-                className="w-8 h-8 rounded-full object-cover"
-              />
-              <p className="bg-gray-300 p-2 rounded-lg">
-                The quality of the product is very good. I really like it. There
-                has not been any problem with the product. I recommend it to
-                everyone
-              </p>
-            </div>
-            <div className="flex gap-2 mb-4">
-              <img
-                src="https://plus.unsplash.com/premium_photo-1690407617686-d449aa2aad3c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt=""
-                className="w-8 h-8 rounded-full object-cover"
-              />
-              <p className="bg-gray-300 p-2 rounded-lg">Very good product.</p>
-            </div>
+            {details.reviews.map((review) => (
+              <div className="flex gap-2 mb-4">
+                <img
+                  src="https://static.vecteezy.com/system/resources/previews/005/005/788/non_2x/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"
+                  alt=""
+                  className="w-8 h-8 rounded-full object-cover border border-black"
+                />
+                <p className="bg-gray-300 p-2 rounded-lg" key={review.id}>
+                  {review.comment}
+                </p>
+              </div>
+            ))}
           </div>
         )}
       </div>
