@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "../components/Card";
 import Filter from "../components/Filter";
 import axios from "axios";
+import { fetchProducts, setProducts } from "../stores/productSlice";
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
   //For pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8); // Number of products per page
+  const products = useSelector(setProducts);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchAllProducts = async () => {
       try {
         const response = await axios.get("https://dummyjson.com/products?limit=48");
         setProducts(response.data.products);
@@ -23,8 +26,8 @@ const Products = () => {
       }
     };
 
-    fetchProducts();
-  }, []);
+    fetchAllProducts();
+  }, [dispatch]);
 
   //Calculate the indices of the current page's products
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -61,7 +64,6 @@ const Products = () => {
           <Filter />
         </div>
 
-        {/* Products Section */}
         <div className="md:w-3/4">
           {loading ? (
             <p className="text-center text-gray-500">Loading products...</p>
@@ -75,6 +77,7 @@ const Products = () => {
                     brand={product.brand}
                     price={product.price}
                     image={product.images[0]}
+                    id={product.id}
                   />
                 ))}
               </div>
@@ -86,7 +89,7 @@ const Products = () => {
                   disabled={currentPage === 1}
                   className="px-2 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50 text-sm"
                 >
-                  Prev  
+                  Prev
                 </button>
                 {[...Array(totalPages).keys()].map((pageNumber) => (
                   <button
