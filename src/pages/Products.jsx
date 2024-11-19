@@ -14,7 +14,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://dummyjson.com/products");
+        const response = await axios.get("https://dummyjson.com/products?limit=48");
         setProducts(response.data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -84,7 +84,7 @@ const Products = () => {
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
+                  className="px-2 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50 text-sm"
                 >
                   Prev  
                 </button>
@@ -92,7 +92,7 @@ const Products = () => {
                   <button
                     key={pageNumber}
                     onClick={() => handlePageChange(pageNumber + 1)}
-                    className={`px-4 py-2 mx-1 rounded-lg ${
+                    className={`px-2 py-1 mx-1 rounded-lg ${
                       currentPage === pageNumber + 1
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 hover:bg-gray-300"
@@ -104,7 +104,7 @@ const Products = () => {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
+                  className="px-2 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50 text-sm m-auto"
                 >
                   Next
                 </button>
