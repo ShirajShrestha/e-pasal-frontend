@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FiHeart, FiSend } from "react-icons/fi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProductDetails,
@@ -14,6 +14,21 @@ const Details = () => {
   const details = useSelector(setProductDetails);
   const [toggleReview, setToggleReview] = useState("description");
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+  const addToCart = () => {
+    const newProduct = {
+      image: details.images?.[0],
+      name: details.title,
+      price: details.price,
+      quantity: quantity,
+    };
+    orders.push(newProduct);
+    let orderString = JSON.stringify(orders);
+    localStorage.setItem("orders", orderString);
+    navigate("/cart");
+  };
 
   const increaseQuantity = () => {
     setQuantity((quantity) => quantity + 1);
@@ -102,7 +117,10 @@ const Details = () => {
                 </span>
               </div>
             </div>
-            <button className="bg-accent w-full my-2 rounded-md p-2 text-white  font-normal">
+            <button
+              className="bg-accent w-full my-2 rounded-md p-2 text-white  font-normal"
+              onClick={() => addToCart()}
+            >
               Add to cart
             </button>
           </div>
