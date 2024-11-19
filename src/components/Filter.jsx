@@ -13,6 +13,20 @@ const Filter = () => {
     <div className="bg-white p-4 rounded-lg shadow-lg">
       <h2 className="text-lg font-semibold mb-4">Filters</h2>
 
+      {/* Search Products */}
+      <div className="flex items-center gap-2 mb-3">
+        <button className="hover:bg-gray-500">
+              <IoMdSearch />
+        </button>
+              <input
+                type="text"
+                placeholder="Search products"
+                className="w-full outline-none px-2 py-1 border rounded-lg"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
       {/* Categories */}
       <div className="mb-6">
         <button
@@ -24,16 +38,7 @@ const Filter = () => {
         </button>
         {isOpen && (
           <div className="mt-2 border rounded-lg p-3 bg-white shadow-lg">
-            <div className="flex items-center gap-2 mb-3">
-              <IoMdSearch />
-              <input
-                type="text"
-                placeholder="Search categories"
-                className="w-full outline-none px-2 py-1 border rounded-lg"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+            
             <ul className="space-y-2">
               {brands
                 .filter((brand) =>
