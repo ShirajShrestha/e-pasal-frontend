@@ -1,4 +1,6 @@
-const Card = ({ name, brand, price, image }) => {
+import { Link } from "react-router-dom";
+
+const Card = ({ name, brand, price, image, id }) => {
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300">
       {/* Image Section */}
@@ -13,15 +15,16 @@ const Card = ({ name, brand, price, image }) => {
       {/* Content Section */}
       <div className="p-4 flex flex-col gap-2">
         <p className="text-xs text-gray-500 uppercase tracking-wide">{brand}</p>
-        <h3 
-          className="text-lg font-semibold text-gray-800 truncate">{name}</h3>
+        <h3 className="text-lg font-semibold text-gray-800 truncate">{name}</h3>
         <p className="text-blue-600 font-bold text-sm">Price: ${price}</p>
       </div>
 
       <div className="p-4 pt-0 flex justify-between items-center">
-        <button className="bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
-          View Details
-        </button>
+        <Link to={`/products/${id}`}>
+          <button className="bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
+            View Details
+          </button>
+        </Link>
       </div>
     </div>
   );

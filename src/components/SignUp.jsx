@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signupUser } from "../stores/authActions";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +14,9 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -27,6 +33,7 @@ const SignUp = () => {
       return;
     }
     console.log("Form data submitted:", formData);
+    dispatch(signupUser(formData));
   };
 
   return (
@@ -38,6 +45,7 @@ const SignUp = () => {
         <h2 className="text-2xl font-bold text-center mb-4 text-tertiary">
           Sign Up
         </h2>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
         {/* Profile Picture */}
         <div className="mb-4">
@@ -159,17 +167,17 @@ const SignUp = () => {
           type="submit"
           className="w-full bg-accent text-white py-2 px-4 rounded hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50"
         >
-          Sign Up
+          {isLoading ? "Signing Up..." : "Sign Up"}
         </button>
         {/* Login Link */}
         <p className="text-xs text-center mt-3">
           Already have an account?{" "}
-          {/* <Link
-            to="/login"
+          <Link
+            to="/signin"
             className="text-accent font-semibold hover:underline"
           >
             Log in
-          </Link> */}
+          </Link>
         </p>
       </form>
     </div>
