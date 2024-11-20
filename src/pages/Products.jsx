@@ -8,7 +8,7 @@ import { fetchProducts, setProducts } from "../stores/productSlice";
 const Products = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const API_BASE_URL = "http://localhost:3001";
+  const api = process.env.REACT_APP_API_BASE_URL;
 
   //For pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,10 +18,8 @@ const Products = () => {
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
-        const response = await axios.get("https://dummyjson.com/products");
-        // Uee this link to use backend api
-        // const backendData = await axios.get(`${API_BASE_URL}/api/v1/products`);
-        dispatch(fetchProducts(response.data.products));
+        const response = await axios.get(`${api}/products`);
+        dispatch(fetchProducts(response.data.data));
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -76,10 +74,10 @@ const Products = () => {
                 {currentProducts.map((product) => (
                   <Card
                     key={product.id}
-                    name={product.title}
+                    name={product.name}
                     brand={product.brand}
                     price={product.price}
-                    image={product.images[0]}
+                    image={product.image_urls[0]}
                     id={product.id}
                   />
                 ))}
