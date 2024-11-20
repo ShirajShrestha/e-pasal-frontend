@@ -10,11 +10,15 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const api = process.env.REACT_APP_API_BASE_URL;
 
-  //For pagination
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  // const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8); // Number of products per page
+  const [minPrice, setMinPrice] = useState(""); // Minimum price from Filter
+  const [maxPrice, setMaxPrice] = useState(""); // Maximum price from Filter
   const products = useSelector(setProducts);
 
+  // Fetch all products from the API
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
@@ -30,18 +34,30 @@ const Products = () => {
     fetchAllProducts();
   }, [dispatch]);
 
-  //Calculate the indices of the current page's products
+  // filtered products based on the search term,category, and price range
+  const filteredProducts = products.filter((product) => {
+    const matchesSearchTerm = product.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesPriceRange =
+      (!minPrice || product.price >= minPrice) &&
+      (!maxPrice || product.price <= maxPrice);
+
+    return matchesSearchTerm && matchesPriceRange;
+  });
+
+  // For Pagination
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
+  const currentProducts = filteredProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
 
-  //Calculate total pages
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  // Calculate total pages based on filtered products
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
-  //Handle page change
+  // Handle page change
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
@@ -62,7 +78,11 @@ const Products = () => {
       <div className="flex flex-col md:flex-row justify-center my-8 gap-4 w-[90vw] md:w-full lg:w-4/5 mx-4">
         {/* Filter Section */}
         <div className="md:w-1/4">
-          <Filter />
+          <Filter
+            setSearchTerm={setSearchTerm} 
+            setMinPrice={setMinPrice}
+            setMaxPrice={setMaxPrice}
+          />
         </div>
 
         <div className="md:w-3/4">
@@ -88,7 +108,7 @@ const Products = () => {
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
+                  className="px-2 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50 text-sm"
                 >
                   Prev
                 </button>
@@ -96,7 +116,7 @@ const Products = () => {
                   <button
                     key={pageNumber}
                     onClick={() => handlePageChange(pageNumber + 1)}
-                    className={`px-4 py-2 mx-1 rounded-lg ${
+                    className={`px-2 py-1 mx-1 rounded-lg ${
                       currentPage === pageNumber + 1
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 hover:bg-gray-300"
@@ -108,14 +128,14 @@ const Products = () => {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
+                  className="px-2 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50 text-sm"
                 >
                   Next
                 </button>
               </div>
             </>
           ) : (
-            <p className="text-center text-gray-500">No products available.</p>
+            <p className="text-center text-gray-500">No products found.</p>
           )}
         </div>
       </div>
