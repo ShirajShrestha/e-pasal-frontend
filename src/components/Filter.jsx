@@ -1,46 +1,68 @@
 import React, { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 
-const Filter = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
+  const [isOpen, setIsOpen] = useState(false); // For category dropdown
+  const [localSearchTerm, setLocalSearchTerm] = useState(""); // Local state for search term input
+  const [localMinPrice, setLocalMinPrice] = useState(""); // Local state for minimum price
+  const [localMaxPrice, setLocalMaxPrice] = useState(""); // Local state for maximum price
 
-  const brands = ["Beauty", "Fragrances", "Furniture", "Groceries", "Laptops"];
+  const brands = ["Beauty", "Fragrances", "Furniture", "Groceries", "Laptops"]; // Example categories
+
+  const handleSearchChange = (e) => {
+    setLocalSearchTerm(e.target.value);
+    setSearchTerm(e.target.value);
+  };
+
+  const handleMinPriceChange = (e) => {
+    setLocalMinPrice(e.target.value);
+    setMinPrice(e.target.value);
+  };
+
+  const handleMaxPriceChange = (e) => {
+    setLocalMaxPrice(e.target.value);
+    setMaxPrice(e.target.value);
+  };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-lg">
-      <h2 className="text-lg font-semibold mb-4">Filters</h2>
+    <div className="bg-white p-6 rounded-xl shadow-lg space-y-6">
+      <h2 className="text-xl font-bold text-gray-800">Filters</h2>
+
+      {/* Search Products */}
+      <div className="flex items-center gap-3">
+        <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
+          <IoMdSearch size={20} />
+        </button>
+        <input
+          type="text"
+          placeholder="Search products"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
+          value={localSearchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
 
       {/* Categories */}
-      <div className="mb-6">
+      <div>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex justify-between items-center w-full border px-4 py-2 rounded-lg text-gray-700 bg-gray-100 focus:outline-none"
+          className="flex justify-between items-center w-full border px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none"
         >
-          Categories
-          <span className="ml-2">{isOpen ? "▲" : "▼"}</span>
+          <span className="font-semibold">Categories</span>
+          <span className="ml-2 text-sm">{isOpen ? "▲" : "▼"}</span>
         </button>
         {isOpen && (
-          <div className="mt-2 border rounded-lg p-3 bg-white shadow-lg">
-            <div className="flex items-center gap-2 mb-3">
-              <IoMdSearch />
-              <input
-                type="text"
-                placeholder="Search categories"
-                className="w-full outline-none px-2 py-1 border rounded-lg"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+          <div className="mt-3 bg-white border border-gray-200 rounded-lg shadow-md p-4">
             <ul className="space-y-2">
               {brands
                 .filter((brand) =>
-                  brand.toLowerCase().includes(searchTerm.toLowerCase())
+                  brand.toLowerCase().includes(localSearchTerm.toLowerCase())
                 )
                 .map((brand, index) => (
-                  <li key={index} className="text-gray-700 hover:text-blue-500">
+                  <li
+                    key={index}
+                    className="cursor-pointer text-gray-700 hover:text-blue-500 hover:underline"
+                  >
                     {brand}
                   </li>
                 ))}
@@ -51,22 +73,24 @@ const Filter = () => {
 
       {/* Price Range */}
       <div>
-        <h3 className="font-semibold mb-3">Price Range</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-3">
+          Price Range
+        </h3>
         <div className="flex items-center gap-3">
           <input
             type="number"
             placeholder="Min"
-            className="w-full border px-3 py-2 rounded-lg"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
+            value={localMinPrice}
+            onChange={handleMinPriceChange}
           />
-          <span className="font-semibold">to</span>
+          <span className="text-gray-600 font-semibold">to</span>
           <input
             type="number"
             placeholder="Max"
-            className="w-full border px-3 py-2 rounded-lg"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
+            value={localMaxPrice}
+            onChange={handleMaxPriceChange}
           />
         </div>
       </div>
