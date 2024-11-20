@@ -13,7 +13,7 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
   // const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(8); // Number of products per page
+  const [productsPerPage] = useState(); // Number of products per page
   const [minPrice, setMinPrice] = useState(""); // Minimum price from Filter
   const [maxPrice, setMaxPrice] = useState(""); // Maximum price from Filter
   const products = useSelector(setProducts);
@@ -79,7 +79,7 @@ const Products = () => {
         {/* Filter Section */}
         <div className="md:w-1/4">
           <Filter
-            setSearchTerm={setSearchTerm} 
+            setSearchTerm={setSearchTerm}
             setMinPrice={setMinPrice}
             setMaxPrice={setMaxPrice}
           />
