@@ -17,6 +17,7 @@ const Details = () => {
   const [mainImage, setMainImage] = useState(null); // To track the main displayed image
   const navigate = useNavigate();
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const api = process.env.REACT_APP_API_BASE_URL;
 
   const addToCart = () => {
     const newProduct = {
@@ -46,18 +47,17 @@ const Details = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
-          `https://dummyjson.com/products/${id}`
-        );
-        dispatch(fetchProductDetails(response.data));
-        setMainImage(response.data.images?.[0]); // Set the first image as the default
+        const response = await axios.get(`${api}/products/${id}`);
+        dispatch(fetchProductDetails(response.data.data));
+        setMainImage(response.data.data.image_urls?.[0]); // Set the first image as the default
       } catch (error) {
         console.error("Error fetching product details:", error);
       }
     };
+    console.log(mainImage);
 
     fetchProduct();
-  }, [dispatch, id]);
+  }, [api, dispatch, id]);
 
   if (!details) {
     return <p>Loading...</p>;
@@ -71,12 +71,12 @@ const Details = () => {
           {/* Main Image */}
           <img
             src={mainImage}
-            alt={details.title}
+            alt={details.name}
             className="lg:w-96 object-cover m-auto rounded-md"
           />
           {/* Thumbnails */}
           <div className="flex gap-2 mt-4 justify-center">
-            {details.images?.map((img, index) => (
+            {details.image_urls?.map((img, index) => (
               <img
                 key={index}
                 src={img}
@@ -89,7 +89,7 @@ const Details = () => {
         </div>
         <div className="flex-1 p-4 font-semibold">
           <div className="lg:w-3/4">
-            <p className="font-bold text-2xl">{details.title}</p>
+            <p className="font-bold text-2xl">{details.name}</p>
             <div className="flex items-center justify-between pb-4">
               <p className="font-semibold text-gray-600 ml-2">
                 Brand: {details.brand}
@@ -100,7 +100,7 @@ const Details = () => {
               ${" "}
               {Math.floor(
                 (details.price -
-                  (details.discountPercentage / 100) * details.price) *
+                  (details.discount_percentage / 100) * details.price) *
                   100
               ) / 100}
             </p>
@@ -110,7 +110,7 @@ const Details = () => {
               </span>
               <span className="text-red-600">
                 {" "}
-                {details.discountPercentage} &#37; discount
+                {details.discount_percentage} &#37; discount
               </span>
             </p>
             <p className="text-gray-500 mb-4">
