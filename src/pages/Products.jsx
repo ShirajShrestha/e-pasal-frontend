@@ -8,6 +8,7 @@ import { fetchProducts, setProducts } from "../stores/productSlice";
 const Products = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const API_BASE_URL = "http://localhost:3001";
 
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
   // const [filteredProducts, setFilteredProducts] = useState([]);
@@ -21,9 +22,9 @@ const Products = () => {
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
-        const response = await axios.get(
-          "https://dummyjson.com/products?limit=45"
-        );
+        const response = await axios.get("https://dummyjson.com/products");
+        // Uee this link to use backend api
+        // const backendData = await axios.get(`${API_BASE_URL}/api/v1/products`);
         dispatch(fetchProducts(response.data.products));
       } catch (error) {
         console.error("Error fetching products:", error);

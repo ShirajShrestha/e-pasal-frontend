@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const isLoggedin = false; // Temporary state to check if user is logged in or not
+  const isLoggedin = true; // Temporary state to check if user is logged in or not
 
   // Toggle function for profile dropdown
   const toggleProfileMenu = () => {
