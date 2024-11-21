@@ -14,14 +14,15 @@ const Details = () => {
   const details = useSelector(setProductDetails);
   const [toggleReview, setToggleReview] = useState("description");
   const [quantity, setQuantity] = useState(1);
-  const [mainImage, setMainImage] = useState(null);
+  // const [mainImage, setMainImage] = useState(null);
   const navigate = useNavigate();
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
   const addToCart = () => {
     const newProduct = {
-      image: details.images?.[0],
-      name: details.name,
+      // image: details.images?.[0],
+      image: details.image,
+      name: details.title,
       price: details.price,
       quantity: quantity,
     };
@@ -51,7 +52,7 @@ const Details = () => {
         if (!details || details.id !== id) {
           const response = await requestSingleProduct(id);
           dispatch(fetchProductDetails(response));
-          setMainImage(response.images?.[0]);
+          // setMainImage(response.images?.[0]);
         }
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -74,12 +75,13 @@ const Details = () => {
         <div className="flex-1">
           {/* Main Image */}
           <img
-            src={mainImage}
+            // src={mainImage}
+            src={details.image}
             alt={details.name}
             className="lg:w-96 object-cover m-auto rounded-md"
           />
           {/* Thumbnails */}
-          <div className="flex gap-2 mt-4 justify-center">
+          {/* <div className="flex gap-2 mt-4 justify-center">
             {details.images?.map((img, index) => (
               <img
                 key={index}
@@ -89,11 +91,11 @@ const Details = () => {
                 onClick={() => setMainImage(img)} // Update main image on click
               />
             ))}
-          </div>
+          </div> */}
         </div>
         <div className="flex-1 p-4 font-semibold">
           <div className="lg:w-3/4">
-            <p className="font-bold text-2xl">{details.name}</p>
+            <p className="font-bold text-2xl">{details.title}</p>
             <div className="flex items-center justify-between pb-4">
               <p className="font-semibold text-gray-600 ml-2">
                 Brand: {details.brand}
