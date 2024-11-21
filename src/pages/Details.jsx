@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { FiHeart, FiSend } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,6 +6,7 @@ import {
   fetchProductDetails,
   setProductDetails,
 } from "../stores/productDetailsSlice";
+import { requestSingleProduct } from "../api";
 
 const Details = () => {
   let { id } = useParams();
@@ -14,14 +14,14 @@ const Details = () => {
   const details = useSelector(setProductDetails);
   const [toggleReview, setToggleReview] = useState("description");
   const [quantity, setQuantity] = useState(1);
-  const [mainImage, setMainImage] = useState(null); // To track the main displayed image
+  // const [mainImage, setMainImage] = useState(null);
   const navigate = useNavigate();
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
-  const api = process.env.REACT_APP_API_BASE_URL;
 
   const addToCart = () => {
     const newProduct = {
-      image: details.images?.[0],
+      // image: details.images?.[0],
+      image: details.image,
       name: details.title,
       price: details.price,
       quantity: quantity,
@@ -44,19 +44,25 @@ const Details = () => {
     }
   };
 
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(`${api}/products/${id}`);
-        dispatch(fetchProductDetails(response.data.data));
-        setMainImage(response.data.data.image_urls?.[0]); // Set the first image as the default
+        if (!details || details.id !== id) {
+          const response = await requestSingleProduct(id);
+          dispatch(fetchProductDetails(response));
+          // setMainImage(response.images?.[0]);
+        }
       } catch (error) {
         console.error("Error fetching product details:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProduct();
-  }, [api, dispatch, id]);
+  }, [id, dispatch]);
 
   if (!details) {
     return <p>Loading...</p>;
@@ -69,13 +75,14 @@ const Details = () => {
         <div className="flex-1">
           {/* Main Image */}
           <img
-            src={mainImage}
+            // src={mainImage}
+            src={details.image}
             alt={details.name}
             className="lg:w-96 object-cover m-auto rounded-md"
           />
           {/* Thumbnails */}
-          <div className="flex gap-2 mt-4 justify-center">
-            {details.image_urls?.map((img, index) => (
+          {/* <div className="flex gap-2 mt-4 justify-center">
+            {details.images?.map((img, index) => (
               <img
                 key={index}
                 src={img}
@@ -84,11 +91,11 @@ const Details = () => {
                 onClick={() => setMainImage(img)} // Update main image on click
               />
             ))}
-          </div>
+          </div> */}
         </div>
         <div className="flex-1 p-4 font-semibold">
           <div className="lg:w-3/4">
-            <p className="font-bold text-2xl">{details.name}</p>
+            <p className="font-bold text-2xl">{details.title}</p>
             <div className="flex items-center justify-between pb-4">
               <p className="font-semibold text-gray-600 ml-2">
                 Brand: {details.brand}

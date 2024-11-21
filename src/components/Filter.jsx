@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { IoMdSearch } from "react-icons/io";
+import { useState } from "react";
 
 const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
   const [isOpen, setIsOpen] = useState(false); // For category dropdown
@@ -11,7 +10,7 @@ const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
     setLocalSearchTerm(e.target.value);
     setSearchTerm(e.target.value);
   };
-  
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg space-y-6">
       <h2 className="text-xl font-bold text-gray-800">Filters</h2>
@@ -19,7 +18,8 @@ const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
       {/* Search Products */}
       <div className="flex items-center gap-3">
         <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-          <IoMdSearch size={20} />
+          {/* <IoMdSearch size={20} /> */}
+          <i className="fa-solid fa-magnifying-glass"></i>
         </button>
         <input
           type="text"
