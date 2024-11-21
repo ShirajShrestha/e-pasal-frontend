@@ -19,6 +19,9 @@ const Details = () => {
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
   const api = process.env.REACT_APP_API_BASE_URL;
 
+  const[comment, setComment] = useState("")
+  const[displayComment, setDisplayComment]= useState("")
+
   const addToCart = () => {
     const newProduct = {
       image: details.images?.[0],
@@ -43,6 +46,14 @@ const Details = () => {
       setQuantity((quantity) => quantity - 1);
     }
   };
+
+  const handleChange = (e) => {
+    setComment(e.target.value)
+  }
+
+  const handleCommentSubmit =() => {
+    setDisplayComment(comment)
+  }
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -193,11 +204,15 @@ const Details = () => {
                   type="text"
                   placeholder="Leave a comment..."
                   className="p-1 w-full outline-none border-none"
+                  onChange={handleChange}
                 />
-                <button className="bg-accent p-2 rounded-full">
+                <button className="bg-accent p-2 rounded-full" onClick={handleCommentSubmit}>
                   <FiSend />
                 </button>
               </div>
+            </div>
+            <div className="ml-14">
+                <p>{displayComment}</p>
             </div>
             {/* reviews for this product */}
             {details.reviews?.map((review, index) => (

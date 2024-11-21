@@ -73,10 +73,10 @@ const Products = () => {
               {products.map((product) => (
                 <Card
                   key={product.id}
-                  name={product.name}
+                  name={product.title}
                   brand={product.brand}
                   price={product.price}
-                  image={product.image_urls?.[0]}
+                  image={product.image}
                   id={product.id}
                 />
               ))}

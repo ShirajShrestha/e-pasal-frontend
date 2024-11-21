@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 
-const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
+const Filter = ({}) => {
   const [isOpen, setIsOpen] = useState(false); // For category dropdown
   const [localSearchTerm, setLocalSearchTerm] = useState(""); // Local state for search term input
 
@@ -9,7 +9,6 @@ const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
 
   const handleSearchChange = (e) => {
     setLocalSearchTerm(e.target.value);
-    setSearchTerm(e.target.value);
   };
   
   return (
