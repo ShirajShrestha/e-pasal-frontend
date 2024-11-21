@@ -4,8 +4,6 @@ import { IoMdSearch } from "react-icons/io";
 const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
   const [isOpen, setIsOpen] = useState(false); // For category dropdown
   const [localSearchTerm, setLocalSearchTerm] = useState(""); // Local state for search term input
-  const [localMinPrice, setLocalMinPrice] = useState(""); // Local state for minimum price
-  const [localMaxPrice, setLocalMaxPrice] = useState(""); // Local state for maximum price
 
   const brands = ["Beauty", "Fragrances", "Furniture", "Groceries", "Laptops"]; // Example categories
 
@@ -13,17 +11,7 @@ const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
     setLocalSearchTerm(e.target.value);
     setSearchTerm(e.target.value);
   };
-
-  const handleMinPriceChange = (e) => {
-    setLocalMinPrice(e.target.value);
-    setMinPrice(e.target.value);
-  };
-
-  const handleMaxPriceChange = (e) => {
-    setLocalMaxPrice(e.target.value);
-    setMaxPrice(e.target.value);
-  };
-
+  
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg space-y-6">
       <h2 className="text-xl font-bold text-gray-800">Filters</h2>
@@ -69,30 +57,6 @@ const Filter = ({ setSearchTerm, setMinPrice, setMaxPrice }) => {
             </ul>
           </div>
         )}
-      </div>
-
-      {/* Price Range */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">
-          Price Range
-        </h3>
-        <div className="flex items-center gap-3">
-          <input
-            type="number"
-            placeholder="Min"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
-            value={localMinPrice}
-            onChange={handleMinPriceChange}
-          />
-          <span className="text-gray-600 font-semibold">to</span>
-          <input
-            type="number"
-            placeholder="Max"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
-            value={localMaxPrice}
-            onChange={handleMaxPriceChange}
-          />
-        </div>
       </div>
     </div>
   );

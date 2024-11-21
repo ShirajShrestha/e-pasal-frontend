@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { fetchProducts, setProducts } from "../stores/productSlice";
@@ -7,24 +7,47 @@ import Filter from "../components/Filter";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const api = process.env.REACT_APP_API_BASE_URL;
+  let api = process.env.REACT_APP_API_BASE_URL;
 
-  const products = useSelector(setProducts);
+  const [products, setProducts] = useState([]);
+  const [paginationInfo, setPaginationInfo] = useState({
+    next_page_url: null,
+    prev_page_url: null,
+  });
 
-  // Fetch all products from the API
+  // Fetch products from the API
+  const fetchProductsFromApi = async (url) => {
+    try {
+      const response = await axios.get(url);
+      const data = response.data;
+
+      setProducts(data.data);
+      setPaginationInfo({
+        next_page_url: data.next_page_url,
+        prev_page_url: data.prev_page_url,
+      });
+      dispatch(fetchProducts(data.data));
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  // Initial load
   useEffect(() => {
-    const fetchAllProducts = async () => {
-      try {
-        const response = await axios.get(`${api}/products`);
-        dispatch(fetchProducts(response.data.data));
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
+    fetchProductsFromApi(`${api}/products`);
+  }, [api]);
 
-    fetchAllProducts();
-  }, [api, dispatch]);
-
+  //Pagination
+  const handlePrevPage = () => {
+    if (paginationInfo.prev_page_url) {
+      fetchProductsFromApi(paginationInfo.prev_page_url);
+    }
+  };
+  const handleNextPage = () => {
+    if (paginationInfo.next_page_url) {
+      fetchProductsFromApi(paginationInfo.next_page_url);
+    }
+  };
   return (
     <div>
       {/* Banner Image */}
@@ -53,7 +76,7 @@ const Products = () => {
                   name={product.name}
                   brand={product.brand}
                   price={product.price}
-                  image={product.image_urls[0]}
+                  image={product.image_urls?.[0]}
                   id={product.id}
                 />
               ))}
@@ -62,6 +85,23 @@ const Products = () => {
             <p className="text-center text-gray-500">No products available.</p>
           )}
         </div>
+      </div>
+      {/* Prev and Next Buttons */}
+      <div className="flex justify-center align-center my-8 gap-4">
+        <button
+          className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
+          onClick={handlePrevPage}
+          disabled={!paginationInfo.prev_page_url}
+        >
+          Prev
+        </button>
+        <button
+          className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
+          onClick={() => handleNextPage()}
+          disabled={!paginationInfo.next_page_url}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
