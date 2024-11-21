@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { FiHeart, FiSend } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,6 +6,7 @@ import {
   fetchProductDetails,
   setProductDetails,
 } from "../stores/productDetailsSlice";
+import { requestSingleProduct } from "../api";
 
 const Details = () => {
   let { id } = useParams();
@@ -14,10 +14,9 @@ const Details = () => {
   const details = useSelector(setProductDetails);
   const [toggleReview, setToggleReview] = useState("description");
   const [quantity, setQuantity] = useState(1);
-  const [mainImage, setMainImage] = useState(null); // To track the main displayed image
+  const [mainImage, setMainImage] = useState(null);
   const navigate = useNavigate();
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
-  const api = process.env.REACT_APP_API_BASE_URL;
 
   const addToCart = () => {
     const newProduct = {
@@ -47,16 +46,28 @@ const Details = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`${api}/products/${id}`);
-        dispatch(fetchProductDetails(response.data.data));
-        setMainImage(response.data.data.images?.[0]); // Set the first image as the default
+        const response = await requestSingleProduct(id);
+        dispatch(fetchProductDetails(response));
+        setMainImage(response.data.data.images?.[0]);
       } catch (error) {
         console.error("Error fetching product details:", error);
+      }
+
+      try {
+        if (!details || details.id !== id) {
+          const response = await requestSingleProduct(id);
+          dispatch(fetchProductDetails(response));
+          setMainImage(response.data.data.images?.[0]);
+        } else {
+          setMainImage(details.images?.[0]);
+        }
+      } catch (error) {
+        console.log("Error fetching product details", error);
       }
     };
 
     fetchProduct();
-  }, [api, dispatch, id]);
+  }, [details, dispatch, id]);
 
   if (!details) {
     return <p>Loading...</p>;
