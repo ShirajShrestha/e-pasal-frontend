@@ -49,7 +49,7 @@ const Details = () => {
       try {
         const response = await axios.get(`${api}/products/${id}`);
         dispatch(fetchProductDetails(response.data.data));
-        setMainImage(response.data.data.image_urls?.[0]); // Set the first image as the default
+        setMainImage(response.data.data.images?.[0]); // Set the first image as the default
       } catch (error) {
         console.error("Error fetching product details:", error);
       }
@@ -61,6 +61,7 @@ const Details = () => {
   if (!details) {
     return <p>Loading...</p>;
   }
+  console.log(details);
 
   return (
     <div className="my-4">
@@ -75,7 +76,7 @@ const Details = () => {
           />
           {/* Thumbnails */}
           <div className="flex gap-2 mt-4 justify-center">
-            {details.image_urls?.map((img, index) => (
+            {details.images?.map((img, index) => (
               <img
                 key={index}
                 src={img}
