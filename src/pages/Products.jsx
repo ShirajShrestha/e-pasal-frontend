@@ -1,29 +1,30 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { fetchProducts, setProducts } from "../stores/productSlice";
+// import axios from "axios";
+import { selectProducts, setProducts } from "../stores/productSlice";
 import Card from "../components/Card";
 import Filter from "../components/Filter";
+import { requestAllProducts } from "../api";
 
 const Products = () => {
   const dispatch = useDispatch();
   const api = process.env.REACT_APP_API_BASE_URL;
+  const products = useSelector(selectProducts);
 
-  const products = useSelector(setProducts);
-
-  // Fetch all products from the API
   useEffect(() => {
-    const fetchAllProducts = async () => {
-      try {
-        const response = await axios.get(`${api}/products`);
-        dispatch(fetchProducts(response.data.data));
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
+    if (products.length === 0) {
+      const fetchAllProducts = async () => {
+        try {
+          const response = await requestAllProducts();
+          dispatch(setProducts(response.data));
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+      };
 
-    fetchAllProducts();
-  }, [api, dispatch]);
+      fetchAllProducts();
+    }
+  }, [api, dispatch, products.length]);
 
   return (
     <div>

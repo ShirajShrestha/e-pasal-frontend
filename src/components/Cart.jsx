@@ -36,12 +36,12 @@ const Cart = () => {
             key={order.id}
           >
             <div className="w-[15%] shrink-0">
-              <img src={order.image} alt={order.title} />
+              <img src={order.image} alt={order.name} />
             </div>
             <div className="w-[85%] flex mx-2 text-sm md:text-lg">
               <div className="w-[50%] mx-2 ">
                 <p className="w-full whitespace-nowrap overflow-hidden text-ellipsis">
-                  {order.title}
+                  {order.name}
                 </p>
               </div>
               <div className="flex flex-col items-center mx-4 w-[25%]  ">
