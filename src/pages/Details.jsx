@@ -22,7 +22,7 @@ const Details = () => {
   const addToCart = () => {
     const newProduct = {
       image: details.images?.[0],
-      name: details.title,
+      name: details.name,
       price: details.price,
       quantity: quantity,
     };
