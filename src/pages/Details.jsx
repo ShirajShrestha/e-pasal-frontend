@@ -61,7 +61,6 @@ const Details = () => {
   if (!details) {
     return <p>Loading...</p>;
   }
-  console.log(details);
 
   return (
     <div className="my-4">
