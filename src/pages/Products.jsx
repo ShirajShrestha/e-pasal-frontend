@@ -1,54 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Card from "../components/Card";
-import Filter from "../components/Filter";
 import axios from "axios";
 import { fetchProducts, setProducts } from "../stores/productSlice";
+import Card from "../components/Card";
+import Filter from "../components/Filter";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
+  const api = process.env.REACT_APP_API_BASE_URL;
 
-  //For pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(8); // Number of products per page
   const products = useSelector(setProducts);
 
+  // Fetch all products from the API
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
-        const response = await axios.get("https://dummyjson.com/products");
-        dispatch(fetchProducts(response.data.products));
+        const response = await axios.get(`${api}/products`);
+        dispatch(fetchProducts(response.data.data));
       } catch (error) {
         console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchAllProducts();
-  }, [dispatch]);
-
-  //Calculate the indices of the current page's products
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
-
-  //Calculate total pages
-  const totalPages = Math.ceil(products.length / productsPerPage);
-
-  //Handle page change
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
-    }
-  };
+  }, [api, dispatch]);
 
   return (
     <div>
+      {/* Banner Image */}
       <div className="lg:h-96">
         <img
           src="https://images.unsplash.com/photo-1445384763658-0400939829cd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -64,55 +43,21 @@ const Products = () => {
           <Filter />
         </div>
 
+        {/* Products Section */}
         <div className="md:w-3/4">
-          {loading ? (
-            <p className="text-center text-gray-500">Loading products...</p>
-          ) : currentProducts.length > 0 ? (
-            <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {currentProducts.map((product) => (
-                  <Card
-                    key={product.id}
-                    name={product.title}
-                    brand={product.brand}
-                    price={product.price}
-                    image={product.images[0]}
-                    id={product.id}
-                  />
-                ))}
-              </div>
-
-              {/* Pagination Section */}
-              <div className="flex justify-center items-center mt-8">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
-                >
-                  Prev
-                </button>
-                {[...Array(totalPages).keys()].map((pageNumber) => (
-                  <button
-                    key={pageNumber}
-                    onClick={() => handlePageChange(pageNumber + 1)}
-                    className={`px-4 py-2 mx-1 rounded-lg ${
-                      currentPage === pageNumber + 1
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 hover:bg-gray-300"
-                    } transition`}
-                  >
-                    {pageNumber + 1}
-                  </button>
-                ))}
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 mx-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
-                >
-                  Next
-                </button>
-              </div>
-            </>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {products.map((product) => (
+                <Card
+                  key={product.id}
+                  name={product.name}
+                  brand={product.brand}
+                  price={product.price}
+                  image={product.image_urls[0]}
+                  id={product.id}
+                />
+              ))}
+            </div>
           ) : (
             <p className="text-center text-gray-500">No products available.</p>
           )}
