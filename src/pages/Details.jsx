@@ -43,31 +43,25 @@ const Details = () => {
     }
   };
 
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchProduct = async () => {
-      try {
-        const response = await requestSingleProduct(id);
-        dispatch(fetchProductDetails(response));
-        setMainImage(response.data.data.images?.[0]);
-      } catch (error) {
-        console.error("Error fetching product details:", error);
-      }
-
+      setLoading(true);
       try {
         if (!details || details.id !== id) {
           const response = await requestSingleProduct(id);
           dispatch(fetchProductDetails(response));
-          setMainImage(response.data.data.images?.[0]);
-        } else {
-          setMainImage(details.images?.[0]);
+          setMainImage(response.images?.[0]);
         }
       } catch (error) {
-        console.log("Error fetching product details", error);
+        console.error("Error fetching product details:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProduct();
-  }, [details, dispatch, id]);
+  }, [id, dispatch]);
 
   if (!details) {
     return <p>Loading...</p>;
