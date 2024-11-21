@@ -1,30 +1,34 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import axios from "axios";
 import { selectProducts, setProducts } from "../stores/productSlice";
 import Card from "../components/Card";
 import Filter from "../components/Filter";
-import { requestAllProducts } from "../api";
+import { requestAllProducts, searchProducts } from "../api";
+import { useSearchParams } from "react-router-dom";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const api = process.env.REACT_APP_API_BASE_URL;
   const products = useSelector(selectProducts);
+  const [searchParams] = useSearchParams();
+  const searchKeyword = searchParams.get("search");
 
   useEffect(() => {
-    if (products.length === 0) {
-      const fetchAllProducts = async () => {
-        try {
+    const fetchProducts = async () => {
+      try {
+        if (searchKeyword) {
+          const response = await searchProducts(searchKeyword);
+          dispatch(setProducts(response));
+        } else {
           const response = await requestAllProducts();
           dispatch(setProducts(response.data));
-        } catch (error) {
-          console.error("Error fetching products:", error);
         }
-      };
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
 
-      fetchAllProducts();
-    }
-  }, [api, dispatch, products.length]);
+    fetchProducts();
+  }, [dispatch, searchKeyword]);
 
   return (
     <div>

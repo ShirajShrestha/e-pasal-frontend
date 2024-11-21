@@ -10,3 +10,9 @@ export const requestSingleProduct = async (id) => {
   const response = await axios.get(`${api}/products/${id}`);
   return response.data.data;
 };
+
+export const searchProducts = async (params) => {
+  const response = await axios.get(`${api}/products/search?keyword=${params}`);
+  console.log(response.data.result);
+  return response.data.result;
+};
