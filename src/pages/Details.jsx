@@ -54,7 +54,6 @@ const Details = () => {
         console.error("Error fetching product details:", error);
       }
     };
-    console.log(mainImage);
 
     fetchProduct();
   }, [api, dispatch, id]);
