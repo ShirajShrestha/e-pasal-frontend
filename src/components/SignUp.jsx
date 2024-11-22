@@ -39,13 +39,10 @@ const SignUp = () => {
 
     try {
       const response = await signUp(formData);
-      console.log("Signup successful:", response);
-      alert("Signup successful!");
+      console.log(response.user);
     } catch (error) {
       console.error("Signup error:", error);
-      alert("Signup failed. Please try again.");
     }
-    // signUp(formData)
 
   };
 
