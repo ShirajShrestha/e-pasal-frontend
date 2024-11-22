@@ -1,22 +1,22 @@
-import {
-  FiShoppingCart,
-  FiHeart,
-  FiMenu,
-  FiUser,
-  FiLogOut,
-  FiShoppingBag,
-  FiPhone,
-  FiSearch,
-} from "react-icons/fi";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const isLoggedin = true; // Temporary state to check if user is logged in or not
   const [searchData, setSearchData] = useState("");
+  let userData = null;
+
+  try {
+    const cookieData = Cookies.get("user_data");
+    if (cookieData) {
+      userData = JSON.parse(cookieData);
+    }
+  } catch (error) {
+    console.error("Failed to parse user_data cookie:", error);
+  }
 
   // Toggle function for profile dropdown
   const toggleProfileMenu = () => {
@@ -26,6 +26,7 @@ const Navbar = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate(`/products?search=${searchData}`);
+    setSearchData("");
   };
 
   return (
@@ -75,36 +76,22 @@ const Navbar = () => {
             type="submit"
             className="ml-2 p-2 text-white bg-accent rounded-lg border border-accent hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-secondary"
           >
-            <svg
-              className="w-5 h-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
+            <i className="fa-solid fa-magnifying-glass"></i>
             <span className="sr-only">Search</span>
           </button>
         </form>
         {/* Icons and User Profile section (Only visible on larger screens) */}
-        {isLoggedin ? (
+        {userData ? (
           <div className="hidden lg:flex items-center space-x-4">
             <Link to="/products">
-              <FiShoppingBag className="text-xl cursor-pointer hover:text-accent" />
+              <i className="fa-solid fa-bag-shopping text-xl cursor-pointer hover:text-accent"></i>
             </Link>
             <Link to="/cart">
-              <FiShoppingCart className="text-xl cursor-pointer hover:text-accent" />
+              <i className="fa-solid fa-cart-shopping text-xl cursor-pointer hover:text-accent"></i>
             </Link>
-            <FiHeart className="text-xl cursor-pointer hover:text-accent" />
+            <i className="fa-regular fa-heart text-xl cursor-pointer hover:text-accent"></i>
             <Link to="/contacts">
-              <FiPhone className="text-xl cursor-pointer hover:text-accent" />
+              <i className="fa-solid fa-phone text-xl cursor-pointer hover:text-accent"></i>
             </Link>
             <div className="relative">
               <div
@@ -116,7 +103,9 @@ const Navbar = () => {
                   alt="user"
                   className="w-8 h-8 rounded-full object-cover"
                 />
-                <p className="text-gray-700 font-semibold">Aurora</p>
+                <p className="text-gray-700 font-semibold">
+                  {userData.first_name}
+                </p>
               </div>
 
               {/* Profile Dropdown */}
@@ -126,13 +115,14 @@ const Navbar = () => {
                     href="/profile"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
                   >
-                    <FiUser className="mr-2" /> Profile
+                    <i className="fa-regular fa-user mr-2"></i> Profile
                   </a>
                   <a
                     href="/logout"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
                   >
-                    <FiLogOut className="mr-2" /> Logout
+                    <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>{" "}
+                    Logout
                   </a>
                 </div>
               )}
@@ -159,7 +149,7 @@ const Navbar = () => {
           className="lg:hidden text-accent"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          <FiMenu size={24} />
+          <i className="fa-solid fa-bars" size={24}></i>
         </button>
       </div>
 
@@ -187,29 +177,29 @@ const Navbar = () => {
               type="submit"
               className="ml-2 p-2 bg-accent text-white rounded-lg"
             >
-              <FiSearch />
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </form>
 
           {/* Links and Profile Options */}
-          {isLoggedin ? (
+          {userData ? (
             <div className="space-y-4 mt-4">
               <Link to="/products" className="flex items-center space-x-2">
-                <FiShoppingBag className="text-xl text-gray-700" />
+                <i className="fa-solid fa-bag-shopping text-xl text-gray-700"></i>
                 <span>Products</span>
               </Link>
               <div className="flex items-center space-x-2">
                 <Link to="/cart">
-                  <FiShoppingCart className="text-xl text-gray-700 cursor-pointer hover:text-accent" />
+                  <i className="fa-solid fa-cart-shopping text-xl text-gray-700 cursor-pointer hover:text-accent"></i>
                   <span>Cart</span>
                 </Link>
               </div>
               <div className="flex items-center space-x-2">
-                <FiHeart className="text-xl text-gray-700" />
+                <i className="fa-regular fa-heart text-xl text-gray-700"></i>
                 <span>Favorites</span>
               </div>
               <Link to="/contacts" className="flex items-center space-x-2">
-                <FiPhone className="text-xl text-gray-700" />
+                <i className="fa-solid fa-phone text-xl text-gray-700"></i>
                 <span>Contact</span>
               </Link>
 
@@ -223,7 +213,9 @@ const Navbar = () => {
                     alt="user"
                     className="w-8 h-8 rounded-full object-cover"
                   />
-                  <p className="text-gray-700 font-semibold">Aurora</p>
+                  <p className="text-gray-700 font-semibold">
+                    {userData.first_name}{" "}
+                  </p>
                 </div>
                 {profileMenuOpen && (
                   <div className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-10">
@@ -231,13 +223,14 @@ const Navbar = () => {
                       to="/profile"
                       className="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
-                      <FiUser className="mr-2" /> Profile
+                      <i className="fa-regular fa-user mr-2"></i> Profile
                     </Link>
                     <Link
                       to="/logout"
                       className="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
-                      <FiLogOut className="mr-2" /> Logout
+                      <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>{" "}
+                      Logout
                     </Link>
                   </div>
                 )}
