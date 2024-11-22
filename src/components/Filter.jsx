@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IoMdSearch } from "react-icons/io";
 
 // eslint-disable-next-line react/prop-types
 const Filter = () => {
@@ -27,8 +28,8 @@ const Filter = () => {
       <form onSubmit={handleSumbit}>
         <div className="flex items-center gap-3">
           <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-            {/* <IoMdSearch size={20} /> */}
-            <i className="fa-solid fa-magnifying-glass"></i>
+            <IoMdSearch size={14} />
+            {/* <i className="fa-solid fa-magnifying-glass"></i> */}
           </button>
           <input
             type="text"
