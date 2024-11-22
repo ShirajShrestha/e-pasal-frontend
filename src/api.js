@@ -1,11 +1,14 @@
 import axios from "axios";
-const api = process.env.REACT_APP_API_BASE_URL;
 import Cookies from "js-cookie";
+const api = process.env.REACT_APP_API_BASE_URL;
+
+const userData = JSON.parse(Cookies.get("user_data"));
+const userId = userData.id;
 
 export const requestAllProducts = async (url = null) => {
   const endpoint = url || `${api}/products`;
   const response = await axios.get(endpoint);
-  return response.data;
+  console.log(response);
 };
 
 export const requestSingleProduct = async (id) => {
@@ -27,7 +30,6 @@ export const signUp = async (params) => {
     body: JSON.stringify(params),
   });
   const data = await response.json();
-  // console.log('response from api',data)
   return data;
 };
 
@@ -45,4 +47,10 @@ export const signIn = async (params) => {
 
 export const signOut = async () => {
   Cookies.remove("user_data");
+};
+
+export const sendOrder = async (data) => {
+  const response = await axios.post(`${api}/users/${userId}/orders`, data);
+  console.log(response.data);
+  return response.data;
 };
