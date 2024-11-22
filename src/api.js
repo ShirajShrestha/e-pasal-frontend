@@ -21,50 +21,12 @@ export const searchProducts = async (params) => {
 export const signUp = async (params) => {
   const response = await fetch(`${api}/users`, {
     method: "POST",
-    body: params
+    headers:{
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params)
   })
-  console.log(response.json())
-  return response.json()
-
-  // try {
-  //   const formData = new FormData();
-  //   // Convert params to FormData
-  //   Object.keys(params).forEach((key) => {
-  //     if (params[key] !== null && params[key] !== undefined) {
-  //       formData.append(key, params[key]);
-  //     }
-  //     console.log("FormData being sent:", [...formData.entries()]);
-  //   });
-
-  //   const response = await axios.post(`${api}/users`, formData, {
-  //     headers: {
-  //       "Content-Type": "multipart/form-data",
-  //     },
-  //   });
-
-  //   console.log("Response from API:", response.data);
-  //   return response.data;
-  // } catch (error) {
-  //   console.error("Error in signup API:", error.response?.data || error.message);
-  //   alert("Signup failed. Please try again.");
-  //   throw error;
-  // }
+  const data = await response.json()
+  // console.log('response from api',data)
+  return data
 };
-
-
-// export const signUp = async (params) => {
-//   try{
-//     const response = await axios.post(`${api}/users`, params , {
-//      headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     });
-
-//     console.log("Response from API:", response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error in signup API:", error.response?.data || error.message);
-//     alert("Signup failed. Please try again.");
-//     throw error;
-//   }
-// }
