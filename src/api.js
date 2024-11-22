@@ -27,6 +27,7 @@ export const signUp = async (params) => {
     body: JSON.stringify(params),
   });
   const data = await response.json();
+  // console.log('response from api',data)
   return data;
 };
 
