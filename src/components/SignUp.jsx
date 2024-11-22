@@ -10,6 +10,7 @@ const SignUp = () => {
     middleName: "",
     lastName: "",
     address: "",
+    contactPhone: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -26,14 +27,49 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+
+    // Password validation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-    console.log("Form data submitted:", formData);
-    dispatch(signupUser(formData));
+
+    // Create FormData instance to send multipart form data
+    const formDataToSend = new FormData();
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.password);
+    formDataToSend.append("first_name", formData.firstName);
+    formDataToSend.append("middle_name", formData.middleName || "");
+    formDataToSend.append("last_name", formData.lastName);
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("contact_phone", formData.contactPhone);
+    formDataToSend.append("user_image", formData.profilePicture);
+
+    dispatch(signupUser(formDataToSend));
+    // console.log("Form data submitted:", formData);
+
+    // Prepare formData to match backend expectations
+  // const payload = new FormData();
+  // payload.append("user[profile_picture]", formData.profilePicture);
+  // payload.append("user[first_name]", formData.firstName);
+  // payload.append("user[middle_name]", formData.middleName); // Optional
+  // payload.append("user[last_name]", formData.lastName);
+  // payload.append("user[address]", formData.address);
+  // payload.append("user[contact_phone]", formData.contactPhone); // Add contact phone
+  // payload.append("user[email]", formData.email);
+  // payload.append("user[password]", formData.password);
+  
+
+  // console.log("Payload being sent:", Array.from(payload.entries())); // Inspect this in the console
+  // try {
+  //   await dispatch(signupUser(payload)).unwrap();
+  //   alert("Signup successful!");
+  // } catch (err) {
+  //   console.error("Signup error:", err);
+  //   alert(`Signup failed: ${err}`);
+  // }
   };
 
   return (
@@ -111,6 +147,21 @@ const SignUp = () => {
             type="text"
             name="address"
             value={formData.address}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent"
+            required
+          />
+        </div>
+
+         {/* Contact Phone */}
+         <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Contact Phone
+          </label>
+          <input
+            type="tel"
+            name="contactPhone"
+            value={formData.contactPhone}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
