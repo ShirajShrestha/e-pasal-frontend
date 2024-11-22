@@ -1,6 +1,6 @@
 import axios from "axios";
-const api = import.meta.env.VITE_API_BASE_URL;
 import Cookies from "js-cookie";
+const api = process.env.REACT_APP_API_BASE_URL;
 
 export const requestAllProducts = async (url = null) => {
   const endpoint = url || `${api}/products`;
