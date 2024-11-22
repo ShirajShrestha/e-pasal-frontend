@@ -7,7 +7,16 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [searchData, setSearchData] = useState("");
-  const userDetails = JSON.parse(Cookies.get("user_data"));
+  let userData = null;
+
+  try {
+    const cookieData = Cookies.get("user_data");
+    if (cookieData) {
+      userData = JSON.parse(cookieData);
+    }
+  } catch (error) {
+    console.error("Failed to parse user_data cookie:", error);
+  }
 
   // Toggle function for profile dropdown
   const toggleProfileMenu = () => {
@@ -72,7 +81,7 @@ const Navbar = () => {
           </button>
         </form>
         {/* Icons and User Profile section (Only visible on larger screens) */}
-        {userDetails ? (
+        {userData ? (
           <div className="hidden lg:flex items-center space-x-4">
             <Link to="/products">
               <i className="fa-solid fa-bag-shopping text-xl cursor-pointer hover:text-accent"></i>
@@ -95,7 +104,7 @@ const Navbar = () => {
                   className="w-8 h-8 rounded-full object-cover"
                 />
                 <p className="text-gray-700 font-semibold">
-                  {userDetails.first_name}
+                  {userData.first_name}
                 </p>
               </div>
 
@@ -173,7 +182,7 @@ const Navbar = () => {
           </form>
 
           {/* Links and Profile Options */}
-          {userDetails ? (
+          {userData ? (
             <div className="space-y-4 mt-4">
               <Link to="/products" className="flex items-center space-x-2">
                 <i className="fa-solid fa-bag-shopping text-xl text-gray-700"></i>
@@ -205,7 +214,7 @@ const Navbar = () => {
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <p className="text-gray-700 font-semibold">
-                    {userDetails.first_name}{" "}
+                    {userData.first_name}{" "}
                   </p>
                 </div>
                 {profileMenuOpen && (
