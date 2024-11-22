@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { signOut } from "../api";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -8,6 +9,26 @@ const Navbar = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [searchData, setSearchData] = useState("");
   let userData = null;
+  const [cartCount, setcartCount] = useState(0);
+
+  const updateCartCount = () => {
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    setcartCount(orders.length);
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    toggleProfileMenu();
+  };
+
+  useEffect(() => {
+    updateCartCount();
+
+    const handleCartUpdate = () => updateCartCount();
+    window.addEventListener("cartUpdated", handleCartUpdate);
+
+    return () => window.removeEventListener("cartUpdated", handleCartUpdate);
+  }, []);
 
   try {
     const cookieData = Cookies.get("user_data");
@@ -87,7 +108,12 @@ const Navbar = () => {
               <i className="fa-solid fa-bag-shopping text-xl cursor-pointer hover:text-accent"></i>
             </Link>
             <Link to="/cart">
-              <i className="fa-solid fa-cart-shopping text-xl cursor-pointer hover:text-accent"></i>
+              <div className="relative">
+                <i className="fa-solid fa-cart-shopping text-xl cursor-pointer hover:text-accent "></i>
+                <span className="absolute top-0 right-0 bg-blue-200 px-2 py-0.5 rounded-full -mt-4 -mr-3">
+                  {cartCount}
+                </span>
+              </div>
             </Link>
             <i className="fa-regular fa-heart text-xl cursor-pointer hover:text-accent"></i>
             <Link to="/contacts">
@@ -110,7 +136,7 @@ const Navbar = () => {
 
               {/* Profile Dropdown */}
               {profileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-10">
+                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-50 border border-black">
                   <a
                     href="/profile"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
@@ -118,8 +144,9 @@ const Navbar = () => {
                     <i className="fa-regular fa-user mr-2"></i> Profile
                   </a>
                   <a
-                    href="/logout"
+                    href="/"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
+                    onClick={handleSignOut}
                   >
                     <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>{" "}
                     Logout

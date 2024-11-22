@@ -17,16 +17,27 @@ export const searchProducts = async (params) => {
   return response.data.result;
 };
 
-
 export const signUp = async (params) => {
   const response = await fetch(`${api}/users`, {
     method: "POST",
-    headers:{
+    headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(params)
-  })
-  const data = await response.json()
+    body: JSON.stringify(params),
+  });
+  const data = await response.json();
   // console.log('response from api',data)
-  return data
+  return data;
+};
+
+export const signIn = async (params) => {
+  const response = await fetch(`${api}/users/sign_in`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+  const data = await response.json();
+  return data;
 };
