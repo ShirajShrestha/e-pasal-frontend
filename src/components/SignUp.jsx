@@ -2,21 +2,22 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../stores/authActions";
 import { Link } from "react-router-dom";
+import { signUp } from "../api";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     profilePicture: null,
-    firstName: "",
-    middleName: "",
-    lastName: "",
+    first_name: "",
+    middle_name: "",
+    last_name: "",
     address: "",
-    contactPhone: "",
+    contact_phone: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    // confirmPassword: "",
   });
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
@@ -31,45 +32,21 @@ const SignUp = () => {
     e.preventDefault();
 
     // Password validation
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
-      return;
+    // if (formData.password !== formData.confirmPassword) {
+    //   alert("Passwords do not match.");
+    //   return;
+    // }
+
+    try {
+      const response = await signUp(formData);
+      console.log("Signup successful:", response);
+      alert("Signup successful!");
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Signup failed. Please try again.");
     }
+    // signUp(formData)
 
-    // Create FormData instance to send multipart form data
-    const formDataToSend = new FormData();
-    formDataToSend.append("email", formData.email);
-    formDataToSend.append("password", formData.password);
-    formDataToSend.append("first_name", formData.firstName);
-    formDataToSend.append("middle_name", formData.middleName || "");
-    formDataToSend.append("last_name", formData.lastName);
-    formDataToSend.append("address", formData.address);
-    formDataToSend.append("contact_phone", formData.contactPhone);
-    formDataToSend.append("user_image", formData.profilePicture);
-
-    dispatch(signupUser(formDataToSend));
-    // console.log("Form data submitted:", formData);
-
-    // Prepare formData to match backend expectations
-  // const payload = new FormData();
-  // payload.append("user[profile_picture]", formData.profilePicture);
-  // payload.append("user[first_name]", formData.firstName);
-  // payload.append("user[middle_name]", formData.middleName); // Optional
-  // payload.append("user[last_name]", formData.lastName);
-  // payload.append("user[address]", formData.address);
-  // payload.append("user[contact_phone]", formData.contactPhone); // Add contact phone
-  // payload.append("user[email]", formData.email);
-  // payload.append("user[password]", formData.password);
-  
-
-  // console.log("Payload being sent:", Array.from(payload.entries())); // Inspect this in the console
-  // try {
-  //   await dispatch(signupUser(payload)).unwrap();
-  //   alert("Signup successful!");
-  // } catch (err) {
-  //   console.error("Signup error:", err);
-  //   alert(`Signup failed: ${err}`);
-  // }
   };
 
   return (
@@ -104,8 +81,8 @@ const SignUp = () => {
             </label>
             <input
               type="text"
-              name="firstName"
-              value={formData.firstName}
+              name="first_name"
+              value={formData.first_name}
               onChange={handleChange}
               className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
@@ -117,8 +94,8 @@ const SignUp = () => {
             </label>
             <input
               type="text"
-              name="middleName"
-              value={formData.middleName}
+              name="middle_name"
+              value={formData.middle_name}
               onChange={handleChange}
               className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             />
@@ -129,8 +106,8 @@ const SignUp = () => {
             </label>
             <input
               type="text"
-              name="lastName"
-              value={formData.lastName}
+              name="last_name"
+              value={formData.last_name}
               onChange={handleChange}
               className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
@@ -160,8 +137,8 @@ const SignUp = () => {
           </label>
           <input
             type="tel"
-            name="contactPhone"
-            value={formData.contactPhone}
+            name="contact_phone"
+            value={formData.contact_phone}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
@@ -199,7 +176,7 @@ const SignUp = () => {
         </div>
 
         {/* Confirm Password */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Confirm Password
           </label>
@@ -211,7 +188,7 @@ const SignUp = () => {
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
           />
-        </div>
+        </div> */}
 
         {/* Submit Button */}
         <button
