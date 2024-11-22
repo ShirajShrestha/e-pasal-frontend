@@ -1,5 +1,5 @@
 import axios from "axios";
-const api = import.meta.env.VITE_API_BASE_URL;
+const api = process.env.REACT_APP_API_BASE_URL;
 import Cookies from "js-cookie";
 
 export const requestAllProducts = async (url = null) => {
@@ -27,6 +27,7 @@ export const signUp = async (params) => {
     body: JSON.stringify(params),
   });
   const data = await response.json();
+  // console.log('response from api',data)
   return data;
 };
 
