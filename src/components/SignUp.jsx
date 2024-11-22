@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { signupUser } from "../stores/authActions";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../api";
+import Cookies from "js-cookie";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     profilePicture: null,
     first_name: "",
@@ -17,9 +17,6 @@ const SignUp = () => {
     // confirmPassword: "",
   });
 
-  // const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.auth);
-
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData({
@@ -28,7 +25,7 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Password validation
@@ -39,11 +36,12 @@ const SignUp = () => {
 
     try {
       const response = await signUp(formData);
-      console.log(response.user);
+      const user_data = response.user;
+      Cookies.set("user_data", JSON.stringify(user_data), { expires: 7 });
+      navigate("/products");
     } catch (error) {
       console.error("Signup error:", error);
     }
-
   };
 
   return (
@@ -55,7 +53,6 @@ const SignUp = () => {
         <h2 className="text-2xl font-bold text-center mb-4 text-tertiary">
           Sign Up
         </h2>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
         {/* Profile Picture */}
         <div className="mb-4">
@@ -127,8 +124,8 @@ const SignUp = () => {
           />
         </div>
 
-         {/* Contact Phone */}
-         <div className="mb-4">
+        {/* Contact Phone */}
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Contact Phone
           </label>
@@ -192,7 +189,7 @@ const SignUp = () => {
           type="submit"
           className="w-full bg-accent text-white py-2 px-4 rounded hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50"
         >
-          {isLoading ? "Signing Up..." : "Sign Up"}
+          Sign Up
         </button>
         {/* Login Link */}
         <p className="text-xs text-center mt-3">
