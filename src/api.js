@@ -9,6 +9,7 @@ export const requestAllProducts = async (url = null) => {
   const endpoint = url || `${api}/products`;
   const response = await axios.get(endpoint);
   console.log(response);
+  return response.data
 };
 
 export const requestSingleProduct = async (id) => {
@@ -49,8 +50,8 @@ export const signOut = async () => {
   Cookies.remove("user_data");
 };
 
-export const sendOrder = async (data) => {
-  const response = await axios.post(`${api}/users/${userId}/orders`, data);
+export const sendOrder = async (orderData) => {
+  const response = await axios.post(`${api}/users/${userId}/orders`, orderData);
   console.log(response.data);
   return response.data;
 };
