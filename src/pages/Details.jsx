@@ -252,7 +252,7 @@ const Details = () => {
               className="w-8 h-8 rounded-full object-cover border border-black"
             />
             <div>
-            <p className="text-md">{review.user.first_name}</p>
+            <p className="text-md">{review.user.first_name} {review.user.last_name}</p>
             <p className="bg-gray-300 p-2 rounded-lg">{review.content}</p>
             </div>
 
