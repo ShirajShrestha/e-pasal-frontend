@@ -55,7 +55,8 @@ const Details = () => {
     setComment(e.target.value)
   }
 
-  const handleCommentSubmit = async() => {
+  const handleCommentSubmit = async(e) => {
+    e.preventDefault()
     if(!comment.trim()) return
     const userData = JSON.parse(Cookies.get("user_data"));
     const userId = userData.id;
@@ -201,7 +202,7 @@ const Details = () => {
               "text-accent underline underline-offset-4"
             }
           >
-            Reviews
+            Comments
           </div>
         </section>
 
@@ -221,6 +222,7 @@ const Details = () => {
   dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
           >
             {/* post a review */}
+            <form action="" onSubmit={handleCommentSubmit}>
             <div className="flex items-center gap-2 mb-4">
               <img
                 src="https://static.vecteezy.com/system/resources/previews/005/005/788/non_2x/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"
@@ -235,11 +237,12 @@ const Details = () => {
                   value={comment}
                   onChange={handleChange}
                 />
-                <button className="bg-accent p-2 rounded-full" onClick={handleCommentSubmit}>
+                <button className="bg-accent p-2 rounded-full">
                   <FiSend />
                 </button>
               </div>
             </div>
+            </form>
             {/* reviews for this product */}
             {details.comments.map((review, index) => (
           <div className="flex gap-2 mb-4" key={index}>
