@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
-import { sendOrder } from "../api";
+// import { sendOrder } from "../api";
 
 const Cart = () => {
   let retString = localStorage.getItem("orders");
@@ -13,8 +13,8 @@ const Cart = () => {
   }));
 
   const handleOrder = () => {
-    const response = sendOrder(simplifiedOrders);
-    console.log(response.data);
+    // const response = sendOrder(simplifiedOrders);
+    // console.log(response.data);
   };
 
   const handleDelete = (index) => {
@@ -29,11 +29,7 @@ const Cart = () => {
       window.dispatchEvent(new Event("cartUpdated"));
     }
   };
-<<<<<<< HEAD
-  console.log("Orders list : ",orders)
 
-=======
->>>>>>> 9a61db864c9d65432995ba67bd1c20073df7da94
   return (
     <div
       className="flex flex-col w-full md:w-[60vw] m-auto h-[75vh] overflow-y-auto [&::-webkit-scrollbar]:w-2

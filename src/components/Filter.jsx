@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-<<<<<<< HEAD
-const Filter = ({}) => {
-=======
-// eslint-disable-next-line react/prop-types
 const Filter = () => {
   const navigate = useNavigate();
->>>>>>> 9a61db864c9d65432995ba67bd1c20073df7da94
   const [isOpen, setIsOpen] = useState(false); // For category dropdown
   const [localSearchTerm, setLocalSearchTerm] = useState(""); // Local state for search term input
 

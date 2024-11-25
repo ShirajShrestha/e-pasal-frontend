@@ -2,8 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 const api = process.env.REACT_APP_API_BASE_URL;
 
-const userData = JSON.parse(Cookies.get("user_data"));
-const userId = userData.id;
+// const userData = JSON.parse(Cookies.get("user_data"));
+// const userId = userData.id;
 
 export const requestAllProducts = async (url = null) => {
   const endpoint = url || `${api}/products`;
@@ -49,8 +49,8 @@ export const signOut = async () => {
   Cookies.remove("user_data");
 };
 
-export const sendOrder = async (orderData) => {
-  const response = await axios.post(`${api}/users/${userId}/orders`, orderData);
-  console.log(response.data);
-  return response.data;
-};
+// export const sendOrder = async (orderData) => {
+//   const response = await axios.post(`${api}/users/${userId}/orders`, orderData);
+//   console.log(response.data);
+//   return response.data;
+// };

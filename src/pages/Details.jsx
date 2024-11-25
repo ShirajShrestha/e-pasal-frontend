@@ -6,7 +6,11 @@ import {
   fetchProductDetails,
   setProductDetails,
 } from "../stores/productDetailsSlice";
+//  
 import { requestSingleProduct } from "../api";
+import axios from "axios"
+import Cookies from "js-cookie"
+
 
 const Details = () => {
   let { id } = useParams();
@@ -16,6 +20,9 @@ const Details = () => {
   const [quantity, setQuantity] = useState(1);
   // const [mainImage, setMainImage] = useState(null);
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const api = process.env.REACT_APP_API_BASE_URL;
+  const [loading, setLoading] = useState(false)
+  const[comment, setComment] = useState("")
 
   const addToCart = () => {
     const newProduct = {
@@ -44,7 +51,32 @@ const Details = () => {
     }
   };
 
-  const [loading, setLoading] = useState(true);
+  const handleChange = (e) => {
+    setComment(e.target.value)
+  }
+
+  const handleCommentSubmit = async() => {
+    if(!comment.trim()) return
+    const userData = JSON.parse(Cookies.get("user_data"));
+    const userId = userData.id;
+
+    try{
+      const response = await axios.post(`${api}/products/${id}/comments`, {
+        content: comment,
+        user_id: userId,
+      })
+
+      //Update the UI with new comment
+      const newComment = response.data.comment; 
+      setComment((prevComments)=> [newComment, ...prevComments])
+      setComment("") //Clear the input field
+    }
+    catch(error){
+      console.error("Error posting comment:", error);
+      alert(error.response?.data?.message || "An error occurred");
+    }
+  }
+
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
@@ -200,6 +232,7 @@ const Details = () => {
                   type="text"
                   placeholder="Leave a comment..."
                   className="p-1 w-full outline-none border-none"
+                  value={comment}
                   onChange={handleChange}
                 />
                 <button className="bg-accent p-2 rounded-full" onClick={handleCommentSubmit}>
@@ -207,19 +240,20 @@ const Details = () => {
                 </button>
               </div>
             </div>
-            <div className="ml-14">
-                <p>{displayComment}</p>
-            </div>
             {/* reviews for this product */}
-            {details.reviews?.map((review, index) => (
-              <div className="flex gap-2 mb-4" key={index}>
-                <img
-                  src="https://static.vecteezy.com/system/resources/previews/005/005/788/non_2x/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"
-                  alt=""
-                  className="w-8 h-8 rounded-full object-cover border border-black"
-                />
-                <p className="bg-gray-300 p-2 rounded-lg">{review.comment}</p>
-              </div>
+            {details.comments.map((review, index) => (
+          <div className="flex gap-2 mb-4" key={index}>
+            <img
+              src="https://static.vecteezy.com/system/resources/previews/005/005/788/non_2x/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"
+              alt=""
+              className="w-8 h-8 rounded-full object-cover border border-black"
+            />
+            <div>
+            <p className="text-md">{review.user.first_name}</p>
+            <p className="bg-gray-300 p-2 rounded-lg">{review.content}</p>
+            </div>
+
+          </div>
             ))}
           </div>
         )}
