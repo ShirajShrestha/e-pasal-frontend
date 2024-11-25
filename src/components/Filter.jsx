@@ -1,7 +1,13 @@
-import React, { useState } from "react";
-import { IoMdSearch } from "react-icons/io";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+<<<<<<< HEAD
 const Filter = ({}) => {
+=======
+// eslint-disable-next-line react/prop-types
+const Filter = () => {
+  const navigate = useNavigate();
+>>>>>>> 9a61db864c9d65432995ba67bd1c20073df7da94
   const [isOpen, setIsOpen] = useState(false); // For category dropdown
   const [localSearchTerm, setLocalSearchTerm] = useState(""); // Local state for search term input
 
@@ -10,24 +16,33 @@ const Filter = ({}) => {
   const handleSearchChange = (e) => {
     setLocalSearchTerm(e.target.value);
   };
-  
+
+  const handleSumbit = (e) => {
+    e.preventDefault();
+    navigate(`/products?search=${localSearchTerm}`);
+    setLocalSearchTerm("");
+  };
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg space-y-6">
       <h2 className="text-xl font-bold text-gray-800">Filters</h2>
 
       {/* Search Products */}
-      <div className="flex items-center gap-3">
-        <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-          <IoMdSearch size={20} />
-        </button>
-        <input
-          type="text"
-          placeholder="Search products"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
-          value={localSearchTerm}
-          onChange={handleSearchChange}
-        />
-      </div>
+      <form onSubmit={handleSumbit}>
+        <div className="flex items-center gap-3">
+          <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
+            {/* <IoMdSearch size={20} /> */}
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <input
+            type="text"
+            placeholder="Search products"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
+            value={localSearchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </form>
 
       {/* Categories */}
       <div>

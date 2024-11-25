@@ -1,10 +1,21 @@
 import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
+import { sendOrder } from "../api";
 
 const Cart = () => {
   let retString = localStorage.getItem("orders");
   let initialOrders = JSON.parse(retString) || [];
   const [orders, setOrders] = useState(initialOrders);
+
+  let simplifiedOrders = initialOrders.map((order) => ({
+    id: order.id,
+    quantity: order.quantity,
+  }));
+
+  const handleOrder = () => {
+    const response = sendOrder(simplifiedOrders);
+    console.log(response.data);
+  };
 
   const handleDelete = (index) => {
     const confirmDelete = window.confirm(
@@ -15,10 +26,14 @@ const Cart = () => {
       const updatedOrders = orders.filter((_, i) => i !== index);
       setOrders(updatedOrders); // Update state
       localStorage.setItem("orders", JSON.stringify(updatedOrders)); // Update localStorage
+      window.dispatchEvent(new Event("cartUpdated"));
     }
   };
+<<<<<<< HEAD
   console.log("Orders list : ",orders)
 
+=======
+>>>>>>> 9a61db864c9d65432995ba67bd1c20073df7da94
   return (
     <div
       className="flex flex-col w-full md:w-[60vw] m-auto h-[75vh] overflow-y-auto [&::-webkit-scrollbar]:w-2
@@ -65,7 +80,10 @@ const Cart = () => {
 
       {orders && orders.length > 0 && (
         <div className="flex items-center">
-          <button className="ml-4 px-4 py-2 text-base md:text-md bg-accent text-gray-800 rounded-lg hover:bg-primary transition duration-200 my-3 ">
+          <button
+            className="ml-4 px-4 py-2 text-base md:text-md bg-accent text-gray-800 rounded-lg hover:bg-primary transition duration-200 my-3 "
+            onClick={handleOrder}
+          >
             Order
           </button>
         </div>

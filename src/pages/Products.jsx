@@ -1,53 +1,73 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { fetchProducts, setProducts } from "../stores/productSlice";
 import Card from "../components/Card";
 import Filter from "../components/Filter";
+import { useDispatch, useSelector } from "react-redux";
+import { selectProducts, setProducts } from "../stores/productSlice";
+import { requestAllProducts, searchProducts } from "../api";
+import { useSearchParams } from "react-router-dom";
 
 const Products = () => {
   const dispatch = useDispatch();
-  let api = process.env.REACT_APP_API_BASE_URL;
-
-  const [products, setProducts] = useState([]);
+  const products = useSelector(selectProducts);
+  const [searchParams] = useSearchParams();
+  const searchKeyword = searchParams.get("search");
   const [paginationInfo, setPaginationInfo] = useState({
     next_page_url: null,
     prev_page_url: null,
   });
 
-  // Fetch products from the API
-  const fetchProductsFromApi = async (url) => {
-    try {
-      const response = await axios.get(url);
-      const data = response.data;
-
-      setProducts(data.data);
-      setPaginationInfo({
-        next_page_url: data.next_page_url,
-        prev_page_url: data.prev_page_url,
-      });
-      dispatch(fetchProducts(data.data));
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
-  // Initial load
   useEffect(() => {
-    fetchProductsFromApi(`${api}/products`);
-  }, [api]);
+    const fetchProducts = async () => {
+      try {
+        if (searchKeyword) {
+          const response = await searchProducts(searchKeyword);
+          dispatch(setProducts(response));
+        } else {
+          const response = await requestAllProducts();
+          dispatch(setProducts(response.data));
+          setPaginationInfo({
+            next_page_url: response.next_page_url,
+            prev_page_url: response.prev_page_url,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
 
-  //Pagination
-  const handlePrevPage = () => {
+    fetchProducts();
+  }, [dispatch, searchKeyword]);
+
+  const handlePrevPage = async () => {
     if (paginationInfo.prev_page_url) {
-      fetchProductsFromApi(paginationInfo.prev_page_url);
+      try {
+        const response = await requestAllProducts(paginationInfo.prev_page_url);
+        dispatch(setProducts(response.data));
+        setPaginationInfo({
+          next_page_url: response.next_page_url,
+          prev_page_url: response.prev_page_url,
+        });
+      } catch (error) {
+        console.error("Error fetching previous page:", error);
+      }
     }
   };
-  const handleNextPage = () => {
+
+  const handleNextPage = async () => {
     if (paginationInfo.next_page_url) {
-      fetchProductsFromApi(paginationInfo.next_page_url);
+      try {
+        const response = await requestAllProducts(paginationInfo.next_page_url);
+        dispatch(setProducts(response.data));
+        setPaginationInfo({
+          next_page_url: response.next_page_url,
+          prev_page_url: response.prev_page_url,
+        });
+      } catch (error) {
+        console.error("Error fetching next page:", error);
+      }
     }
   };
+
   return (
     <div>
       {/* Banner Image */}
@@ -97,7 +117,7 @@ const Products = () => {
         </button>
         <button
           className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
-          onClick={() => handleNextPage()}
+          onClick={handleNextPage}
           disabled={!paginationInfo.next_page_url}
         >
           Next

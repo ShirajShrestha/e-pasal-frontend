@@ -1,35 +1,68 @@
-import {
-  FiShoppingCart,
-  FiHeart,
-  FiMenu,
-  FiUser,
-  FiLogOut,
-  FiShoppingBag,
-  FiPhone,
-  FiSearch,
-} from "react-icons/fi";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { signOut } from "../api";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const isLoggedin = true; // Temporary state to check if user is logged in or not
+  const [searchData, setSearchData] = useState("");
+  let userData = null;
+  const [cartCount, setcartCount] = useState(0);
+
+  const updateCartCount = () => {
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    setcartCount(orders.length);
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    toggleProfileMenu();
+  };
+
+  useEffect(() => {
+    updateCartCount();
+
+    const handleCartUpdate = () => updateCartCount();
+    window.addEventListener("cartUpdated", handleCartUpdate);
+
+    return () => window.removeEventListener("cartUpdated", handleCartUpdate);
+  }, []);
+
+  try {
+    const cookieData = Cookies.get("user_data");
+    if (cookieData) {
+      userData = JSON.parse(cookieData);
+    }
+  } catch (error) {
+    console.error("Failed to parse user_data cookie:", error);
+  }
 
   // Toggle function for profile dropdown
   const toggleProfileMenu = () => {
     setProfileMenuOpen(!profileMenuOpen);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/products?search=${searchData}`);
+    setSearchData("");
+    setMenuOpen(false);
+  };
+
   return (
     <nav className="bg-white font-primary shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo section*/}
-        <a href="/" className="text-2xl font-bold text-primary">
+        <Link to="/" className="text-2xl font-bold text-primary">
           E-Pasal
-        </a>
+        </Link>
         {/* Search Bar (Only visible on larger screens) */}
-        <form className="hidden lg:flex items-center w-1/2">
+        <form
+          className="hidden lg:flex items-center w-1/2"
+          onSubmit={handleSubmit}
+        >
           <label htmlFor="simple-search" className="sr-only">
             Search
           </label>
@@ -54,6 +87,8 @@ const Navbar = () => {
             <input
               type="text"
               id="simple-search"
+              value={searchData}
+              onChange={(e) => setSearchData(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-accent focus:border-accent block w-full pl-10 p-2"
               placeholder="Search product name..."
               required
@@ -63,64 +98,68 @@ const Navbar = () => {
             type="submit"
             className="ml-2 p-2 text-white bg-accent rounded-lg border border-accent hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-secondary"
           >
-            <svg
-              className="w-5 h-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
+            <i className="fa-solid fa-magnifying-glass"></i>
             <span className="sr-only">Search</span>
           </button>
         </form>
         {/* Icons and User Profile section (Only visible on larger screens) */}
-        {isLoggedin ? (
+        {userData ? (
           <div className="hidden lg:flex items-center space-x-4">
             <Link to="/products">
-              <FiShoppingBag className="text-xl cursor-pointer hover:text-accent" />
+              <i className="fa-solid fa-bag-shopping text-xl cursor-pointer hover:text-accent"></i>
             </Link>
             <Link to="/cart">
-              <FiShoppingCart className="text-xl cursor-pointer hover:text-accent" />
+              <div className="relative">
+                <i className="fa-solid fa-cart-shopping text-xl cursor-pointer hover:text-accent "></i>
+                <span className="absolute top-0 right-0 bg-blue-200 px-2 py-0.5 rounded-full -mt-4 -mr-3">
+                  {cartCount}
+                </span>
+              </div>
             </Link>
-            <FiHeart className="text-xl cursor-pointer hover:text-accent" />
+            <Link to="/order">
+              <i className="fa-regular fa-clipboard text-xl cursor-pointer hover:text-accent"></i>
+            </Link>
             <Link to="/contacts">
-              <FiPhone className="text-xl cursor-pointer hover:text-accent" />
+              <i className="fa-solid fa-phone text-xl cursor-pointer hover:text-accent"></i>
             </Link>
             <div className="relative">
               <div
                 onClick={toggleProfileMenu}
                 className="flex items-center space-x-2 cursor-pointer"
               >
-                <img
-                  src="https://images.unsplash.com/photo-1723200166097-4eed8c141f03?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="user"
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-                <p className="text-gray-700 font-semibold">Aurora</p>
+                {userData.image ? (
+                  <div>
+                    <img src={userData.image} alt={userData.first_name} />
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center">
+                    {" "}
+                    <span className="font-bold">
+                      {userData.first_name.charAt(0).toUpperCase()}
+                    </span>{" "}
+                  </div>
+                )}
+                <p className="text-gray-700 font-semibold">
+                  {userData.first_name}
+                </p>
               </div>
 
               {/* Profile Dropdown */}
               {profileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-10">
-                  <a
+                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-50 border border-black">
+                  {/* <a
                     href="/profile"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
                   >
-                    <FiUser className="mr-2" /> Profile
-                  </a>
+                    <i className="fa-regular fa-user mr-2"></i> Profile
+                  </a> */}
                   <a
-                    href="/logout"
+                    href="/"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
+                    onClick={handleSignOut}
                   >
-                    <FiLogOut className="mr-2" /> Logout
+                    <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>{" "}
+                    Logout
                   </a>
                 </div>
               )}
@@ -147,7 +186,7 @@ const Navbar = () => {
           className="lg:hidden text-accent"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          <FiMenu size={24} />
+          <i className="fa-solid fa-bars" size={24}></i>
         </button>
       </div>
 
@@ -159,9 +198,14 @@ const Navbar = () => {
       >
         <div className="bg-gray-50 shadow-lg rounded-lg p-4">
           {/* Search Bar */}
-          <form className="flex items-center bg-white p-2 rounded-lg shadow-sm">
+          <form
+            className="flex items-center bg-white p-2 rounded-lg shadow-sm"
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
+              value={searchData}
+              onChange={(e) => setSearchData(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-accent focus:border-accent block w-full p-2"
               placeholder="Search product..."
               required
@@ -170,29 +214,47 @@ const Navbar = () => {
               type="submit"
               className="ml-2 p-2 bg-accent text-white rounded-lg"
             >
-              <FiSearch />
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </form>
 
           {/* Links and Profile Options */}
-          {isLoggedin ? (
+          {userData ? (
             <div className="space-y-4 mt-4">
-              <Link to="/products" className="flex items-center space-x-2">
-                <FiShoppingBag className="text-xl text-gray-700" />
+              <Link
+                to="/products"
+                className="flex items-center space-x-2"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <i className="fa-solid fa-bag-shopping text-xl text-gray-700"></i>
                 <span>Products</span>
               </Link>
               <div className="flex items-center space-x-2">
-                <Link to="/cart">
-                  <FiShoppingCart className="text-xl text-gray-700 cursor-pointer hover:text-accent" />
-                  <span>Cart</span>
+                <Link
+                  to="/cart"
+                  className="flex items-center space-x-2"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                >
+                  <i className="fa-solid fa-cart-shopping text-xl text-gray-700 cursor-pointer hover:text-accent"></i>
+                  <span> Cart</span>
                 </Link>
               </div>
-              <div className="flex items-center space-x-2">
-                <FiHeart className="text-xl text-gray-700" />
-                <span>Favorites</span>
-              </div>
-              <Link to="/contacts" className="flex items-center space-x-2">
-                <FiPhone className="text-xl text-gray-700" />
+              <Link
+                to="/order"
+                className="flex items-center space-x-2"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <div className="flex items-center space-x-2">
+                  <i className="fa-regular fa-clipboard text-xl text-gray-700"></i>
+                  <span>Orders</span>
+                </div>
+              </Link>
+              <Link
+                to="/contacts"
+                className="flex items-center space-x-2"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <i className="fa-solid fa-phone text-xl text-gray-700"></i>
                 <span>Contact</span>
               </Link>
 
@@ -201,26 +263,36 @@ const Navbar = () => {
                   onClick={toggleProfileMenu}
                   className="flex items-center space-x-2 cursor-pointer"
                 >
-                  <img
-                    src="https://images.unsplash.com/photo-1723200166097-4eed8c141f03?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="user"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                  <p className="text-gray-700 font-semibold">Aurora</p>
+                  {userData.image ? (
+                    <div>
+                      <img src={userData.image} alt={userData.first_name} />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center">
+                      {" "}
+                      <span className="font-bold">
+                        {userData.first_name.charAt(0).toUpperCase()}
+                      </span>{" "}
+                    </div>
+                  )}
+                  <p className="text-gray-700 font-semibold">
+                    {userData.first_name}{" "}
+                  </p>
                 </div>
                 {profileMenuOpen && (
                   <div className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-10">
-                    <Link
+                    {/* <Link
                       to="/profile"
                       className="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
-                      <FiUser className="mr-2" /> Profile
-                    </Link>
+                      <i className="fa-regular fa-user mr-2"></i> Profile
+                    </Link> */}
                     <Link
                       to="/logout"
                       className="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
-                      <FiLogOut className="mr-2" /> Logout
+                      <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>{" "}
+                      Logout
                     </Link>
                   </div>
                 )}
