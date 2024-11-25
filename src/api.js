@@ -8,8 +8,7 @@ const userId = userData.id;
 export const requestAllProducts = async (url = null) => {
   const endpoint = url || `${api}/products`;
   const response = await axios.get(endpoint);
-  console.log(response);
-  return response.data
+  return response.data;
 };
 
 export const requestSingleProduct = async (id) => {
