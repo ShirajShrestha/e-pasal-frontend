@@ -6,7 +6,7 @@ const Filter = () => {
   const [isOpen, setIsOpen] = useState(false); // For category dropdown
   const [localSearchTerm, setLocalSearchTerm] = useState(""); // Local state for search term input
 
-  const brands = ["Beauty", "Fragrances", "Furniture", "Groceries", "Laptops"]; // Example categories
+  const brands = ["Beauty", "Fragrances", "Furniture", "Groceries", "Laptops", "mobile-accessories", "vehicle","motorcycle", "skin-care", "smartphones"]; // Example categories
 
   const handleSearchChange = (e) => {
     setLocalSearchTerm(e.target.value);
