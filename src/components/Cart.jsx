@@ -26,7 +26,7 @@ const Cart = () => {
       const response = await postOrder(simplifiedOrders, userId);
       console.log("response after ordering", response);
 
-      if (response.status == 201) {
+      if (response.status === 201) {
         localStorage.setItem("orders", JSON.stringify([]));
         alert("Your order has been sent");
         window.location.reload(); // Refresh the page
