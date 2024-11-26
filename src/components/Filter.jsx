@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Filter = () => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false); // For category dropdown
+  const [isOpen, setIsOpen] = useState(true); // For category dropdown
   const [localSearchTerm, setLocalSearchTerm] = useState(""); // Local state for search term input
 
   const brands = ["Beauty", "Fragrances", "Furniture", "Groceries", "Laptops", "mobile-accessories", "vehicle","motorcycle", "skin-care", "smartphones"]; // Example categories
