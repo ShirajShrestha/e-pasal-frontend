@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { signOut } from "../api";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -8,6 +9,26 @@ const Navbar = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [searchData, setSearchData] = useState("");
   let userData = null;
+  const [cartCount, setcartCount] = useState(0);
+
+  const updateCartCount = () => {
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    setcartCount(orders.length);
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    toggleProfileMenu();
+  };
+
+  useEffect(() => {
+    updateCartCount();
+
+    const handleCartUpdate = () => updateCartCount();
+    window.addEventListener("cartUpdated", handleCartUpdate);
+
+    return () => window.removeEventListener("cartUpdated", handleCartUpdate);
+  }, []);
 
   try {
     const cookieData = Cookies.get("user_data");
@@ -27,6 +48,7 @@ const Navbar = () => {
     e.preventDefault();
     navigate(`/products?search=${searchData}`);
     setSearchData("");
+    setMenuOpen(false);
   };
 
   return (
@@ -87,9 +109,16 @@ const Navbar = () => {
               <i className="fa-solid fa-bag-shopping text-xl cursor-pointer hover:text-accent"></i>
             </Link>
             <Link to="/cart">
-              <i className="fa-solid fa-cart-shopping text-xl cursor-pointer hover:text-accent"></i>
+              <div className="relative">
+                <i className="fa-solid fa-cart-shopping text-xl cursor-pointer hover:text-accent "></i>
+                <span className="absolute top-0 right-0 bg-blue-200 px-2 py-0.5 rounded-full -mt-4 -mr-3">
+                  {cartCount}
+                </span>
+              </div>
             </Link>
-            <i className="fa-regular fa-heart text-xl cursor-pointer hover:text-accent"></i>
+            <Link to="/order">
+              <i className="fa-regular fa-clipboard text-xl cursor-pointer hover:text-accent"></i>
+            </Link>
             <Link to="/contacts">
               <i className="fa-solid fa-phone text-xl cursor-pointer hover:text-accent"></i>
             </Link>
@@ -98,11 +127,18 @@ const Navbar = () => {
                 onClick={toggleProfileMenu}
                 className="flex items-center space-x-2 cursor-pointer"
               >
-                <img
-                  src="https://images.unsplash.com/photo-1723200166097-4eed8c141f03?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="user"
-                  className="w-8 h-8 rounded-full object-cover"
-                />
+                {userData.image ? (
+                  <div>
+                    <img src={userData.image} alt={userData.first_name} />
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center">
+                    {" "}
+                    <span className="font-bold">
+                      {userData.first_name.charAt(0).toUpperCase()}
+                    </span>{" "}
+                  </div>
+                )}
                 <p className="text-gray-700 font-semibold">
                   {userData.first_name}
                 </p>
@@ -110,16 +146,17 @@ const Navbar = () => {
 
               {/* Profile Dropdown */}
               {profileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-10">
-                  <a
+                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-50 border border-black">
+                  {/* <a
                     href="/profile"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
                   >
                     <i className="fa-regular fa-user mr-2"></i> Profile
-                  </a>
+                  </a> */}
                   <a
-                    href="/logout"
+                    href="/"
                     className="flex items-center px-4 py-2 hover:bg-gray-100"
+                    onClick={handleSignOut}
                   >
                     <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>{" "}
                     Logout
@@ -184,21 +221,39 @@ const Navbar = () => {
           {/* Links and Profile Options */}
           {userData ? (
             <div className="space-y-4 mt-4">
-              <Link to="/products" className="flex items-center space-x-2">
+              <Link
+                to="/products"
+                className="flex items-center space-x-2"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
                 <i className="fa-solid fa-bag-shopping text-xl text-gray-700"></i>
                 <span>Products</span>
               </Link>
               <div className="flex items-center space-x-2">
-                <Link to="/cart">
+                <Link
+                  to="/cart"
+                  className="flex items-center space-x-2"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                >
                   <i className="fa-solid fa-cart-shopping text-xl text-gray-700 cursor-pointer hover:text-accent"></i>
-                  <span>Cart</span>
+                  <span> Cart</span>
                 </Link>
               </div>
-              <div className="flex items-center space-x-2">
-                <i className="fa-regular fa-heart text-xl text-gray-700"></i>
-                <span>Favorites</span>
-              </div>
-              <Link to="/contacts" className="flex items-center space-x-2">
+              <Link
+                to="/order"
+                className="flex items-center space-x-2"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <div className="flex items-center space-x-2">
+                  <i className="fa-regular fa-clipboard text-xl text-gray-700"></i>
+                  <span>Orders</span>
+                </div>
+              </Link>
+              <Link
+                to="/contacts"
+                className="flex items-center space-x-2"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
                 <i className="fa-solid fa-phone text-xl text-gray-700"></i>
                 <span>Contact</span>
               </Link>
@@ -208,23 +263,30 @@ const Navbar = () => {
                   onClick={toggleProfileMenu}
                   className="flex items-center space-x-2 cursor-pointer"
                 >
-                  <img
-                    src="https://images.unsplash.com/photo-1723200166097-4eed8c141f03?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="user"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
+                  {userData.image ? (
+                    <div>
+                      <img src={userData.image} alt={userData.first_name} />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center">
+                      {" "}
+                      <span className="font-bold">
+                        {userData.first_name.charAt(0).toUpperCase()}
+                      </span>{" "}
+                    </div>
+                  )}
                   <p className="text-gray-700 font-semibold">
                     {userData.first_name}{" "}
                   </p>
                 </div>
                 {profileMenuOpen && (
                   <div className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-10">
-                    <Link
+                    {/* <Link
                       to="/profile"
                       className="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
                       <i className="fa-regular fa-user mr-2"></i> Profile
-                    </Link>
+                    </Link> */}
                     <Link
                       to="/logout"
                       className="flex items-center px-4 py-2 hover:bg-gray-100"

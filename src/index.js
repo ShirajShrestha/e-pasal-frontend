@@ -7,18 +7,19 @@ import Landing from "./pages/Landing";
 import Contact from "./pages/Contact";
 import Details from "./pages/Details";
 import Products from "./pages/Products";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
-import ErrorPage from "./components/ErrorPage";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Error from "./pages/Error";
 import Cart from "./components/Cart";
 import { Provider } from "react-redux";
 import store from "./stores/store";
+import Order from "./pages/Order";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <ErrorPage />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+      },
+      {
+        path: "/order",
+        element: <Order />,
       },
     ],
   },
