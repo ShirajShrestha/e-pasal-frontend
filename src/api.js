@@ -23,29 +23,28 @@ export const fetchReviews = async (id) => {
     // content: comment,
     // user_id: userId,
   });
-  return response.data
-}
+  return response.data;
+};
 
 export const signUp = async (params) => {
   try {
-    const response = await axios.post(`${api}/users`, params)
-    return response.data
+    const response = await axios.post(`${api}/users`, params);
+    return response.data;
   } catch (error) {
     console.error("Error during sign up:", error);
     throw error.response?.data || error.message;
   }
-}
+};
 
 export const signIn = async (params) => {
-  try{
-    const response = await axios.post(`${api}/users/sign_in`, params, 
-  )
-  return response.data
-}catch(error){
-  console.error("Error during sign in:", error);
-  throw error.response?.data || error.message;
+  try {
+    const response = await axios.post(`${api}/users/sign_in`, params);
+    return response.data;
+  } catch (error) {
+    console.error("Error during sign in:", error);
+    throw error.response?.data || error.message;
   }
-}
+};
 
 export const signOut = async () => {
   Cookies.remove("user_data");
@@ -61,4 +60,14 @@ export const postOrder = async (orderData, userId) => {
 export const fetchAllOrders = async (userId) => {
   const response = await axios.get(`${api}/users/${userId}/orders`);
   return response.data;
+};
+
+export const fetchCategories = async () => {
+  const response = await axios.get(`${api}/product_categories`);
+  return response;
+};
+
+export const filterByCategories = async (id) => {
+  const response = await axios.get(`${api}/product_categories/${id}`);
+  return response;
 };
