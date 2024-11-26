@@ -2,9 +2,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 const api = process.env.REACT_APP_API_BASE_URL;
 
-// const userData = JSON.parse(Cookies.get("user_data"));
-// const userId = userData.id;
-
 export const requestAllProducts = async (url = null) => {
   const endpoint = url || `${api}/products`;
   const response = await axios.get(endpoint);
@@ -28,18 +25,6 @@ export const fetchReviews = async (id) => {
   });
   return response.data
 }
-
-// export const signUp = async (params) => {
-//   const response = await fetch(`${api}/users`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(params),
-//   });
-//   const data = await response.json();
-//   return data;
-// };
 
 export const signUp = async (params) => {
   try {
@@ -66,8 +51,14 @@ export const signOut = async () => {
   Cookies.remove("user_data");
 };
 
-// export const sendOrder = async (orderData) => {
-//   const response = await axios.post(`${api}/users/${userId}/orders`, orderData);
-//   console.log(response.data);
-//   return response.data;
-// };
+export const postOrder = async (orderData, userId) => {
+  const response = await axios.post(`${api}/users/${userId}/orders`, {
+    order_products: orderData,
+  });
+  return response;
+};
+
+export const fetchAllOrders = async (userId) => {
+  const response = await axios.get(`${api}/users/${userId}/orders`);
+  return response.data;
+};
