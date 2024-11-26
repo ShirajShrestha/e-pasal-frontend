@@ -18,11 +18,12 @@ export const searchProducts = async (params) => {
   return response.data.result;
 };
 
-export const fetchReviews = async (id) => {
-  const response = await axios.post(`${api}/products/${id}/comments`, {
-    // content: comment,
-    // user_id: userId,
+export const postReview = async (productId, comment, userId) => {
+  const response = await axios.post(`${api}/products/${productId}/comments`, {
+     content: comment,
+     user_id: userId,
   });
+  console.log("Response from Backend:", response.data);
   return response.data
 }
 
