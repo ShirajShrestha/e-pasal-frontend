@@ -7,8 +7,7 @@ import {
   setProductDetails,
 } from "../stores/productDetailsSlice";
 //  
-import { requestSingleProduct } from "../api";
-import axios from "axios"
+import { requestSingleProduct, postReview} from "../api";
 import Cookies from "js-cookie"
 
 
@@ -20,7 +19,6 @@ const Details = () => {
   const [quantity, setQuantity] = useState(1);
   // const [mainImage, setMainImage] = useState(null);
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
-  const api = process.env.REACT_APP_API_BASE_URL;
   const [loading, setLoading] = useState(false)
   const[comment, setComment] = useState("")
 
@@ -62,15 +60,11 @@ const Details = () => {
     const userId = userData.id;
 
     try{
-      const response = await axios.post(`${api}/products/${id}/comments`, {
-        content: comment,
-        user_id: userId,
-      })
-
-      //Update the UI with new comment
-      const newComment = response.data.comment; 
-      setComment((prevComments)=> [newComment, ...prevComments])
-      setComment("") //Clear the input field
+      const response = await postReview(id, comment, userId)
+      if(response.status == "created"){
+        setComment("");
+        window.location.reload()
+      }
     }
     catch(error){
       console.error("Error posting comment:", error);
