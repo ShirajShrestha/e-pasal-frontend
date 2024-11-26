@@ -54,6 +54,7 @@ const Cart = () => {
       window.dispatchEvent(new Event("cartUpdated"));
     }
   };
+
   return (
     <div
       className="flex flex-col w-full md:w-[60vw] m-auto h-[75vh] overflow-y-auto [&::-webkit-scrollbar]:w-2
