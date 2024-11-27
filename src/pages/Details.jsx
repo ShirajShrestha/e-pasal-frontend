@@ -21,6 +21,7 @@ const Details = () => {
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
   const [loading, setLoading] = useState(false)
   const[comment, setComment] = useState("")
+  const [comments, setComments] = useState([])
 
   const addToCart = () => {
     const newProduct = {
@@ -56,14 +57,25 @@ const Details = () => {
   const handleCommentSubmit = async(e) => {
     e.preventDefault()
     if(!comment.trim()) return
+
     const userData = JSON.parse(Cookies.get("user_data"));
     const userId = userData.id;
 
     try{
       const response = await postReview(id, comment, userId)
-      if(response.status == "created"){
+      if(response.status === "created"){
+        const newComment = {
+          content: comment,
+          user: {
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+          },
+        };
+        //Update the comments state
+        setComments((prevComments)=>[...prevComments, newComment])
+
         setComment("");
-        window.location.reload()
+        // window.location.reload()
       }
     }
     catch(error){
@@ -80,6 +92,9 @@ const Details = () => {
           const response = await requestSingleProduct(id);
           dispatch(fetchProductDetails(response));
           // setMainImage(response.images?.[0]);
+          console.log(response.comments)
+          setComments(response.comments)
+          
         }
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -90,6 +105,10 @@ const Details = () => {
 
     fetchProduct();
   }, [id, dispatch]);
+
+
+  // console.log(details.comments)
+  
   return (
     <>
     {loading ?(<p className="text-center font-bold text-primary min-h-[60vh]">Loading product details</p>):(<div className="my-4">
@@ -234,7 +253,7 @@ const Details = () => {
             </div>
             </form>
             {/* reviews for this product */}
-            {details.comments.map((review, index) => (
+            {comments.map((review, index) => (
           <div className="flex gap-2 mb-4" key={index}>
             <img
               src="https://static.vecteezy.com/system/resources/previews/005/005/788/non_2x/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"
