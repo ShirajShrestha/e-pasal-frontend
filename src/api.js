@@ -35,16 +35,9 @@ export const signIn = async (params) => {
   } catch (error) {
     console.error("Error during sign in:", error);
     throw error.response?.data || error.message;
-  try{
-    const response = await axios.post(`${api}/users/sign_in`, params, 
-    )
-    return response.data
-  }catch(error){
-    console.error("Error during sign in:", error);
-    throw error.response?.data || error.message;
   }
 };
-}
+
 export const signOut = async () => {
   Cookies.remove("user_data");
 };
@@ -76,5 +69,5 @@ export const postReview = async (id, comment, userId) => {
     content: comment,
     user_id: userId,
   });
-  return response.data
-}
+  return response.data;
+};
