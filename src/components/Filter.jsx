@@ -38,8 +38,7 @@ const Filter = () => {
       <form onSubmit={handleSumbit}>
         <div className="flex items-center gap-3">
           <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-            <IoMdSearch size={14} />
-            {/* <i className="fa-solid fa-magnifying-glass"></i> */}
+            <i className="fa-solid fa-magnifying-glass"></i>
           </button>
           <input
             type="text"
