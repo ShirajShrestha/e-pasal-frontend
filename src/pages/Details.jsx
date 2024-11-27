@@ -54,9 +54,24 @@ const Details = () => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+    const userData = JSON.parse(Cookies.get("user_data"));
+    if (!userData) {
+      alert("Log in to send comments");
+      return;
+    }
+
+    // Parse the cookie only if it's a string
+    let parsedUserData = {};
+    try {
+      parsedUserData = typeof userData === 'string' ? JSON.parse(userData) : userData;
+    } catch (error) {
+      console.error("Error parsing user data from cookie", error);
+      alert("An error occurred while processing your data. Please try again.");
+      return;
+    }
+  
     if (!comment.trim()) return;
 
-    const userData = JSON.parse(Cookies.get("user_data"));
     const userId = userData.id;
 
     try {
@@ -65,8 +80,8 @@ const Details = () => {
         const newComment = {
           content: comment,
           user: {
-            first_name: userData.first_name,
-            last_name: userData.last_name,
+            first_name: parsedUserData.first_name,
+            last_name: parsedUserData.last_name,
           },
         };
         //Update the comments state
@@ -227,6 +242,11 @@ const Details = () => {
               >
                 {/* post a review */}
                 <form action="" onSubmit={handleCommentSubmit}>
+                  {!Cookies.get("user_data") && (
+                    <p className="text-red-500 mb-4">
+                      Log in to send comments.
+                    </p>
+                  )}
                   <div className="flex items-center gap-2 mb-4">
                     <img
                       src="https://static.vecteezy.com/system/resources/previews/005/005/788/non_2x/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"
@@ -241,7 +261,10 @@ const Details = () => {
                         value={comment}
                         onChange={handleChange}
                       />
-                      <button className="bg-accent p-2 rounded-full">
+                      <button
+                        className="bg-accent p-2 rounded-full"
+                        disabled={!Cookies.get("user_data")} // Disable button if not logged in
+                      >
                         <FiSend />
                       </button>
                     </div>
