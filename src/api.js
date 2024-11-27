@@ -18,14 +18,6 @@ export const searchProducts = async (params) => {
   return response.data.result;
 };
 
-export const fetchReviews = async (id) => {
-  const response = await axios.post(`${api}/products/${id}/comments`, {
-    // content: comment,
-    // user_id: userId,
-  });
-  return response.data
-}
-
 export const signUp = async (params) => {
   try {
     const response = await axios.post(`${api}/users`, params)
@@ -39,11 +31,11 @@ export const signUp = async (params) => {
 export const signIn = async (params) => {
   try{
     const response = await axios.post(`${api}/users/sign_in`, params, 
-  )
-  return response.data
-}catch(error){
-  console.error("Error during sign in:", error);
-  throw error.response?.data || error.message;
+    )
+    return response.data
+  }catch(error){
+    console.error("Error during sign in:", error);
+    throw error.response?.data || error.message;
   }
 }
 
@@ -63,14 +55,10 @@ export const fetchAllOrders = async (userId) => {
   return response.data;
 };
 
-export const signIn = async (params) => {
-  const response = await fetch(`${api}/users/sign_in`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(params),
+export const postReview = async (id, comment, userId) => {
+  const response = await axios.post(`${api}/products/${id}/comments`, {
+    content: comment,
+    user_id: userId,
   });
-  const data = await response.json();
-  return data;
-};
+  return response.data
+}
