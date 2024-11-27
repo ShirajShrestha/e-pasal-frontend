@@ -90,13 +90,9 @@ const Details = () => {
 
     fetchProduct();
   }, [id, dispatch]);
-
-  if (!details || loading) {
-    return <p>Loading...</p>;
-  }
-
   return (
-    <div className="my-4">
+    <>
+    {loading ?(<p className="text-center font-bold text-primary min-h-[60vh]">Loading product details</p>):(<div className="my-4">
       {/* Image and details section  */}
       <div className="flex flex-col lg:flex-row m-4 lg:mx-20">
         <div className="flex-1">
@@ -255,7 +251,8 @@ const Details = () => {
           </div>
         )}
       </div>
-    </div>
+    </div>) }
+    </>
   );
 };
 
