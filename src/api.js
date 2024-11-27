@@ -44,7 +44,7 @@ export const signIn = async (params) => {
     throw error.response?.data || error.message;
   }
 };
-
+}
 export const signOut = async () => {
   Cookies.remove("user_data");
 };
