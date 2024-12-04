@@ -8,6 +8,7 @@ import {
 } from "../stores/productDetailsSlice";
 import { requestSingleProduct, postReview } from "../api";
 import Cookies from "js-cookie";
+import { getMyToken } from "../utils";
 
 const Details = () => {
   let { id } = useParams();
@@ -16,10 +17,12 @@ const Details = () => {
   const [toggleReview, setToggleReview] = useState("description");
   const [quantity, setQuantity] = useState(1);
   // const [mainImage, setMainImage] = useState(null);
-  let orders = JSON.parse(localStorage.getItem("orders")) || [];
   const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+
+  const myToken = getMyToken();
+  let orders = JSON.parse(localStorage.getItem(`orders_${myToken}`)) || [];
 
   const addToCart = () => {
     const newProduct = {
@@ -32,7 +35,7 @@ const Details = () => {
     };
     orders.push(newProduct);
     let orderString = JSON.stringify(orders);
-    localStorage.setItem("orders", orderString);
+    localStorage.setItem(`orders_${myToken}`, orderString);
     window.dispatchEvent(new Event("cartUpdated"));
   };
 
