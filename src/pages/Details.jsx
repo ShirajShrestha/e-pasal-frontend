@@ -22,8 +22,8 @@ const Details = () => {
   const [comments, setComments] = useState([]);
 
   const myToken = getMyToken();
-  if(!myToken){
-    console.warn("User is not logged in")
+  if (!myToken) {
+    console.warn("User is not logged in");
   }
   let orders = JSON.parse(localStorage.getItem(`orders_${myToken}`)) || [];
 
@@ -61,14 +61,14 @@ const Details = () => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!comment.trim()) {
-      alert("Comment cannot be empty.")
-      return
-    };
- 
+      alert("Comment cannot be empty.");
+      return;
+    }
+
     const myToken = getMyToken();
-    if(!myToken){
-    alert("You must be logged in to submit a comment.")
-    return
+    if (!myToken) {
+      alert("You must be logged in to submit a comment.");
+      return;
     }
 
     const userData = JSON.parse(Cookies.get("user_data"));
@@ -170,32 +170,39 @@ const Details = () => {
                   </span>
                 </p>
                 <p className="text-gray-500 mb-4">
-                  Stock: <span className="text-black">{details.stock} </span>{" "}
+                  Stock: <span className="text-black">{details.stock} </span>
+                  {details.stock === 0 ? (
+                    <p className="text-red-600">Out of stock!</p>
+                  ) : (
+                    <>
+                      <div className="mb-4">
+                        <p className="font-bold mb-1">Qty</p>
+                        <div>
+                          <button
+                            className="border border-black px-2 py-1 rounded cursor-pointer"
+                            onClick={decreaseQuantity}
+                          >
+                            -
+                          </button>
+                          <span className="m-1">{quantity}</span>
+                          <button
+                            className="border border-black px-2 py-1 rounded cursor-pointer disabled:cursor-not-allowed"
+                            onClick={increaseQuantity}
+                            disabled={quantity == details.stock}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <button
+                        className="bg-accent w-full my-2 rounded-md p-2 text-white font-normal"
+                        onClick={() => addToCart()}
+                      >
+                        Add to cart
+                      </button>
+                    </>
+                  )}
                 </p>
-                <div className="mb-4">
-                  <p className="font-bold mb-1">Qty</p>
-                  <div>
-                    <span
-                      className="border border-black px-2 py-1 rounded cursor-pointer"
-                      onClick={decreaseQuantity}
-                    >
-                      -
-                    </span>
-                    <span className="m-1">{quantity}</span>
-                    <span
-                      className="border border-black px-2 py-1 rounded cursor-pointer"
-                      onClick={increaseQuantity}
-                    >
-                      +
-                    </span>
-                  </div>
-                </div>
-                <button
-                  className="bg-accent w-full my-2 rounded-md p-2 text-white font-normal"
-                  onClick={() => addToCart()}
-                >
-                  Add to cart
-                </button>
               </div>
             </div>
           </div>
