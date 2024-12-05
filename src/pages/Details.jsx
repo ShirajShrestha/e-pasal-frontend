@@ -40,8 +40,10 @@ const Details = () => {
     let checkIfExist = orders.find((item) => item.id === newProduct.id);
     if (checkIfExist) {
       checkIfExist.quantity += newProduct.quantity;
+      alert("Product updated in cart");
     } else {
       orders.push(newProduct);
+      alert("Product added in cart");
     }
 
     let orderString = JSON.stringify(orders);
