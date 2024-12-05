@@ -22,6 +22,9 @@ const Details = () => {
   const [comments, setComments] = useState([]);
 
   const myToken = getMyToken();
+  if(!myToken){
+    console.warn("User is not logged in")
+  }
   let orders = JSON.parse(localStorage.getItem(`orders_${myToken}`)) || [];
 
   const addToCart = () => {
@@ -57,13 +60,20 @@ const Details = () => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (!comment.trim()) return;
+    if (!comment.trim()) {
+      alert("Comment cannot be empty.")
+      return
+    };
+ 
+    const myToken = getMyToken();
+    if(!myToken){
+    alert("You must be logged in to submit a comment.")
+    return
+    }
 
     const userData = JSON.parse(Cookies.get("user_data"));
-    const userId = userData.id;
-
     try {
-      const response = await postReview(id, comment, userId);
+      const response = await postReview(id, comment);
       if (response.status === "created") {
         const newComment = {
           content: comment,
