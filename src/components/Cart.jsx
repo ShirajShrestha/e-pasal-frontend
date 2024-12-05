@@ -77,7 +77,7 @@ const Cart = () => {
               <img src={order.image} alt={order.name} />
             </div>
             <div className="w-[85%] flex mx-2 text-sm md:text-lg">
-              <div className="w-[50%] mx-2 ">
+              <div className="w-[50%] mx-2 content-center text-center">
                 <p className="w-full whitespace-nowrap overflow-hidden text-ellipsis">
                   {order.name}
                 </p>

@@ -9,6 +9,7 @@ import {
 import { requestSingleProduct, postReview } from "../api";
 import Cookies from "js-cookie";
 import { getMyToken } from "../utils";
+import { deleteComment } from "../api";
 
 const Details = () => {
   let { id } = useParams();
@@ -20,6 +21,8 @@ const Details = () => {
   const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+
+  console.log(comments);
 
   const myToken = getMyToken();
   if (!myToken) {
@@ -98,6 +101,30 @@ const Details = () => {
     } catch (error) {
       console.error("Error posting comment:", error);
       alert(error.response?.data?.message || "An error occurred");
+    }
+  };
+
+  const handleCommentDelete = async (commentIndex) => {
+    const commentToDelete = comments[commentIndex];
+    const userData = JSON.parse(Cookies.get("user_data"));
+    console.log("commentToDelete.user.id: ", commentToDelete.user.id)
+    console.log("userData.id: ", userData.id)
+    // Check if the comment belongs to the logged-in user
+    if (commentToDelete.user.id !== userData.id) {
+      alert("You can only delete your own comments");
+      return;
+    }
+    try {
+      await deleteComment(id, commentToDelete.id);
+
+      // Remove the deleted comment from the state
+      setComments((prevComments) => {
+        return prevComments.filter((_, index) => index !== commentIndex);
+      });
+      alert("Comment deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      alert(error.message || "An error occurred while deleting the comment.");
     }
   };
 
@@ -288,9 +315,21 @@ const Details = () => {
                       <p className="text-md">
                         {review.user.first_name} {review.user.last_name}
                       </p>
-                      <p className="bg-gray-300 p-2 rounded-lg">
-                        {review.content}
-                      </p>
+                      <div className="flex flex-row items-center mx-4 w-[100%]">
+                        <div className=" w-[85%]">
+                          <p className="bg-gray-300 p-2 rounded-lg">
+                            {review.content}
+                          </p>
+                        </div>
+                        <div className="w-[15%]">
+                          <button
+                            className="pl-4"
+                            onClick={() => handleCommentDelete(index)}
+                          >
+                            <i className="fa-solid fa-trash-can hover:text-red-400"></i>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
