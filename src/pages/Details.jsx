@@ -26,6 +26,8 @@ const Details = () => {
   const userData = getUserData();
   const user_id = userData.id || null;
 
+  console.log(comments);
+
   const myToken = getMyToken();
 
   let orders = user_id
