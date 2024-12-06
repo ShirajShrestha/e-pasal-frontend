@@ -24,8 +24,8 @@ const Details = () => {
 
   const myToken = getMyToken();
 
-  const userData = getUserData()
-  const user_id = userData.id
+  const userData = getUserData();
+  const user_id = userData.id;
 
   let orders = user_id
     ? JSON.parse(localStorage.getItem(`orders_${user_id}`)) || []
@@ -88,23 +88,11 @@ const Details = () => {
       return;
     }
 
-    if (!myToken) {
-      alert("You must be logged in to submit a comment.");
-      return;
-    }
-
     try {
       const response = await postReview(id, comment);
       if (response.status === "created") {
-        const newComment = {
-          content: comment,
-          user: {
-            first_name: userData.first_name,
-            last_name: userData.last_name,
-          },
-        };
         //Update the comments state
-        setComments((prevComments) => [...prevComments, newComment]);
+        setComments((prevComments) => [...prevComments, response.comment]);
         setComment("");
       }
     } catch (error) {
@@ -118,6 +106,7 @@ const Details = () => {
 
     // Check if the comment belongs to the logged-in user
     if (commentToDelete.user.id !== user_id) {
+      debugger;
       alert("You can only delete your own comments");
       return;
     }
