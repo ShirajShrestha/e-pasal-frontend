@@ -24,7 +24,7 @@ const Details = () => {
   const [comments, setComments] = useState([]);
 
   const userData = getUserData();
-  const user_id = userData.id || null;
+  const user_id = userData?.id || null;
 
   console.log(comments);
 
