@@ -85,3 +85,19 @@ export const postReview = async (id, comment) => {
     throw error
   }
 };
+
+export const deleteComment = async(productId, commentId) => {
+  const token = getMyToken();
+  const response = await fetch(`${api}/products/${productId}/comments/${commentId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: token
+      }
+    }
+  )
+  if (!response.ok) {
+    throw new Error("Failed to delete the comment.");
+  }
+  return response.json();
+}
