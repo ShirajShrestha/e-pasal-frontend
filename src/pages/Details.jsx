@@ -118,11 +118,11 @@ const Details = () => {
 
   const handleCommentDelete = async (commentIndex) => {
     const commentToDelete = comments[commentIndex];
-    const userData = JSON.parse(Cookies.get("user_data"));
+    // const userData = JSON.parse(Cookies.get("user_data"));
     console.log("commentToDelete.user.id: ", commentToDelete.user.id)
-    console.log("userData.id: ", userData.id)
+    console.log("userData.id: ", user_id)
     // Check if the comment belongs to the logged-in user
-    if (commentToDelete.user.id !== userData.id) {
+    if (commentToDelete.user.id !== user_id) {
       alert("You can only delete your own comments");
       return;
     }
@@ -333,6 +333,7 @@ const Details = () => {
                             {review.content}
                           </p>
                         </div>
+
                         <div className="w-[15%]">
                           <button
                             className="pl-4"
@@ -341,6 +342,17 @@ const Details = () => {
                             <i className="fa-solid fa-trash-can hover:text-red-400"></i>
                           </button>
                         </div>
+                        {/* {review.user.id === user_id && (
+                        <div className="w-[15%]">
+                          <button
+                            className="pl-4"
+                            onClick={() => handleCommentDelete(index)}
+                          >
+                            <i className="fa-solid fa-trash-can hover:text-red-400"></i>
+                          </button>
+                        </div>
+                        )
+                        } */}
                       </div>
                     </div>
                   </div>
