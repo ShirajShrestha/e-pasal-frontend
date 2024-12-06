@@ -26,8 +26,6 @@ const Details = () => {
   const userData = getUserData();
   const user_id = userData?.id || null;
 
-  console.log(comments);
-
   const myToken = getMyToken();
 
   let orders = user_id
@@ -118,9 +116,7 @@ const Details = () => {
 
   const handleCommentDelete = async (commentIndex) => {
     const commentToDelete = comments[commentIndex];
-    // const userData = JSON.parse(Cookies.get("user_data"));
-    console.log("commentToDelete.user.id: ", commentToDelete.user.id)
-    console.log("userData.id: ", user_id)
+
     // Check if the comment belongs to the logged-in user
     if (commentToDelete.user.id !== user_id) {
       alert("You can only delete your own comments");
