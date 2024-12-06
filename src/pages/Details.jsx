@@ -1,33 +1,42 @@
 import { useEffect, useState } from "react";
 import { FiSend } from "react-icons/fi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProductDetails,
   setProductDetails,
 } from "../stores/productDetailsSlice";
 import { requestSingleProduct, postReview } from "../api";
-import Cookies from "js-cookie";
-import { getMyToken } from "../utils";
+import { getMyToken, getUserData } from "../utils";
 
 const Details = () => {
   let { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const details = useSelector(setProductDetails);
+
+  // const [mainImage, setMainImage] = useState(null);
   const [toggleReview, setToggleReview] = useState("description");
   const [quantity, setQuantity] = useState(1);
-  // const [mainImage, setMainImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
 
+  const userData = getUserData();
+  const user_id = userData.id || null;
+
   const myToken = getMyToken();
-  if (!myToken) {
-    console.warn("User is not logged in");
-  }
-  let orders = JSON.parse(localStorage.getItem(`orders_${myToken}`)) || [];
+
+  let orders = user_id
+    ? JSON.parse(localStorage.getItem(`orders_${user_id}`)) || []
+    : [];
 
   const addToCart = () => {
+    if (!user_id) {
+      alert("Please log in to add products to your cart.");
+      navigate("/signin");
+    }
+
     const newProduct = {
       // image: details.images?.[0],
       id: details.id,
@@ -47,7 +56,7 @@ const Details = () => {
     }
 
     let orderString = JSON.stringify(orders);
-    localStorage.setItem(`orders_${myToken}`, orderString);
+    localStorage.setItem(`orders_${user_id}`, orderString);
     window.dispatchEvent(new Event("cartUpdated"));
   };
 
@@ -74,13 +83,16 @@ const Details = () => {
       return;
     }
 
-    const myToken = getMyToken();
     if (!myToken) {
       alert("You must be logged in to submit a comment.");
       return;
     }
 
-    const userData = JSON.parse(Cookies.get("user_data"));
+    if (!myToken) {
+      alert("You must be logged in to submit a comment.");
+      return;
+    }
+
     try {
       const response = await postReview(id, comment);
       if (response.status === "created") {
@@ -197,7 +209,7 @@ const Details = () => {
                           <button
                             className="border border-black px-2 py-1 rounded cursor-pointer disabled:cursor-not-allowed"
                             onClick={increaseQuantity}
-                            disabled={quantity == details.stock}
+                            disabled={quantity === details.stock}
                           >
                             +
                           </button>
