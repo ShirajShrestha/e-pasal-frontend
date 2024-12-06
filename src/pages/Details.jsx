@@ -88,11 +88,6 @@ const Details = () => {
       return;
     }
 
-    if (!myToken) {
-      alert("You must be logged in to submit a comment.");
-      return;
-    }
-
     try {
       const response = await postReview(id, comment);
       if (response.status === "created") {
